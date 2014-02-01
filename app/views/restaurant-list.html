@@ -1,27 +1,26 @@
-<div class="header">
-  <ul class="nav nav-pills pull-right">
-    <li class="active"><a ng-href="#">Home</a></li>
-    <li><a ng-href="#">About</a></li>
-    <li><a ng-href="#">Contact</a></li>
-  </ul>
-  <h3 class="text-muted">menulang</h3>
-</div>
-
-<div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
-  <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#">Splendid!</a></p>
-</div>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-right" role="search">
+            <div class="form-group">
+                <input type="search" class="form-control" placeholder="Find a restaurant">
+            </div>
+            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"</span></button>
+        </form>    
+    </div>
+</nav>
 
 <div class="row marketing">
-  <div ng-repeat="restaurant in restaurants.models">
-    <h4>{{restaurant.getName()}}</h4>
-  </div>
+  <google-map center='map.center' zoom='map.zoom' draggable="true" options='{streetViewControl:false}'>
+    <markers models="map.markers" coords="'self'" click="'onClicked'" icon="'icon'" 
+             doCluster="map.doCluster" clusterOptions="map.clusterOptions">
+        <windows show="'showWindow'" closeClick="'closeClick'">
+            <h2 ng-non-bindable> {{ title }}</h2>
+            <p class="muted">Available translations:<span class="badge">4</span></p>
+        </windows>
+    </markers>
+  </google-map>
 </div>
 
 <div class="footer">
-  <p>♥ from the Yeoman team</p>
+  <p>&copy; Menu-web: Restaurants in your language</p>
 </div>

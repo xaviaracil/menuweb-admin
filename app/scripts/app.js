@@ -6,7 +6,8 @@ angular.module('menulangApp', [
   'ngSanitize',
   'ParseServices',
   'menulangControllers',
-  'ExternalDataServices'
+  'ExternalDataServices',
+  'google-maps'
 ])
 
 .config(['$routeProvider', function($routeProvider) {

@@ -13,6 +13,12 @@ angular.module('ExternalDataServices')
 		getName: function(name) {
 			return this.get('name');
 		},
+		setLocation: function(location) {
+    		this.set('location', location);
+		},
+		getLocation: function() {
+    		return this.get('location');
+		},
 		destroyParse:function(){
 			return ParseQueryAngular(this,{functionToCall:"destroy"});
 		}

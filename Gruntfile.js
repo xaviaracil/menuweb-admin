@@ -207,8 +207,12 @@ module.exports = function (grunt) {
     usemin: {
       html: ['<%= yeoman.dist %>/{,*/}*.html'],
       css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
+      js: '<%= yeoman.dist %>/scripts/*scripts.js',
       options: {
-        assetsDirs: ['<%= yeoman.dist %>']
+        assetsDirs: ['<%= yeoman.dist %>'],
+        patterns: {
+            js: [[/(images\/.+\.png)/, 'Replacing reference to image']]
+        }
       }
     },
 
@@ -292,6 +296,12 @@ module.exports = function (grunt) {
           cwd: '.tmp/images',
           dest: '<%= yeoman.dist %>/images',
           src: ['generated/*']
+        }, {
+          expand: true,
+          flatten: true,
+          cwd: '<%= yeoman.app %>/bower_components/',
+          src: ['**/dist/fonts/*'],
+          dest: '<%= yeoman.dist %>/fonts'
         }]
       },
       styles: {

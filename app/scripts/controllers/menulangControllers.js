@@ -16,12 +16,12 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantServi
                     latitude: rest.getLocation().latitude,
                     longitude: rest.getLocation().longitude,
                     title: rest.getName(),
-                    icon: 'images/pin.png'
+                    icon: "images/pin.png"
                 }
             }),
             doCluster: true,
             clusterOptions: {
-                title: 'More restaruants here',
+                title: 'More restaurants here',
                 gridSize: 60,
                 ignoreHidden: true,
                 minimumClusterSize: 2,
@@ -29,7 +29,8 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantServi
                 imagePath: 'images/pin',
                 imageSizes: [72]
             }
-        };        
+        };
+                
         // HTML5 geolocation
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
@@ -40,17 +41,13 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantServi
             });
         } 
         
-        onMarkerClicked = function (marker) {
-            marker.showWindow = true;
-        };
-        
         _.each($scope.map.markers, function (marker) {
             marker.closeClick = function () {
                 marker.showWindow = false;
                 $scope.$apply();
             };
             marker.onClicked = function () {
-                onMarkerClicked(marker);
+                marker.showWindow = true;
             };
         });        
     }

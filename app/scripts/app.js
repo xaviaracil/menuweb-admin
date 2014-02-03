@@ -19,7 +19,7 @@ angular.module('menulangApp', [
                 'restaurants': ['RestaurantService', function(RestaurantService) {
 
                     // get the collection from our data definitions
-                    var restaurants = new RestaurantService.collection;
+                    var restaurants = new RestaurantService.collection();
 
                     // use the extended Parse SDK to load the whole collection
                     return restaurants.load();
@@ -30,7 +30,8 @@ angular.module('menulangApp', [
         otherwise({
             redirectTo: '/restaurants'
         });
-}])
+    }
+])
 
 .run(['ParseSDK', 'ExtendParseSDK', '$rootScope', function(ParseService, ExtendParseSDK, $rootScope) {
 }]);

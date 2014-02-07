@@ -49,7 +49,13 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantServi
             marker.onClicked = function () {
                 marker.showWindow = true;
             };
-        });        
+        });    
+        
+        // event handlers
+        $scope.find = function(text) {
+            $scope.query = text;
+            console.log('finding ' + text);
+        }    
     }
 ]);
 

@@ -1,18 +1,20 @@
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container-fluid">
-        <form class="navbar-form navbar-right" role="search" ng-click>
-            <div class="col-xs pull-right">
-                <button class="btn btn-default" ng-show="query" ng-click="resetQuery()" type="button"><span class="glyphicon glyphicon-remove-circle"></span></button>
-            </div>
-            <div class="col-xs-4 pull-right">
-                <div class="input-group">
-                    <input type="search" class="form-control" placeholder="Find a restaurant" ng-model="query">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" ng-click="find(query)" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                    </span>
+        <div class="row">
+            <form class="navbar-form navbar-right" role="search" ng-click>
+                <div class="col-xs pull-right">
+                    <button class="btn btn-default" ng-show="query" ng-click="resetQuery()" type="button"><span class="glyphicon glyphicon-remove-circle"></span></button>
                 </div>
-            </div>
-        </form>    
+                <div class="col-xs-6 pull-right">
+                    <div class="input-group">
+                        <input type="search" class="form-control" placeholder="Find a restaurant" ng-model="query">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" ng-click="find(query)" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                    </div>
+                </div>
+            </form>    
+        </div>
     </div>
 </nav>
 

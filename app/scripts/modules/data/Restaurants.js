@@ -31,7 +31,7 @@ angular.module('ExternalDataServices')
 		},
 		loadRestaurantsWithName: function(name) {
 			this.query = (new Parse.Query(Restaurant));
-			this.query.equalTo('name', name);
+			this.query.contains('name', name);
 			// use the enhanced load() function to fetch the collection
 			return this.load();
 		},

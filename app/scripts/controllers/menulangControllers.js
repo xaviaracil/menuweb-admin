@@ -54,7 +54,18 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantServi
         // event handlers
         $scope.find = function(text) {
             $scope.query = text;
-            console.log('finding ' + text);
+            var foundRestaurantsPromise = restaurants.loadRestaurantsWithName(text);
+            // update markers
+            foundRestaurantsPromise.then(function(foundRestaurants) {
+                $scope.map.markers = _.map(foundRestaurants.models, function(rest) {
+                    return {
+                        latitude: rest.getLocation().latitude,
+                        longitude: rest.getLocation().longitude,
+                        title: rest.getName(),
+                        icon: "images/pin.png"
+                    }
+                });
+            })            
         }    
     }
 ]);

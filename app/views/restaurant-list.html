@@ -1,10 +1,14 @@
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container-fluid">
         <form class="navbar-form navbar-right" role="search" ng-click>
-            <div class="form-group">
-                <input type="search" class="form-control" placeholder="Find a restaurant" ng-model="query">
+            <div class="col-xs-4 pull-right">
+                <div class="input-group">
+                    <input type="search" class="form-control" placeholder="Find a restaurant" ng-model="query">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="find(query)" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                    </span>
+                </div>
             </div>
-            <button ng-click="find(query)" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
         </form>    
     </div>
 </nav>

@@ -3,6 +3,14 @@ var menulangControllers = angular.module('menulangControllers', []);
 menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantService', 'restaurants',
     function($scope, RestaurantService, restaurants) {
         $scope.restaurants = restaurants;
+        var initialMarkers = _.map(restaurants.models, function(rest) {
+            return {
+                latitude: rest.getLocation().latitude,
+                longitude: rest.getLocation().longitude,
+                title: rest.getName(),
+                icon: "images/pin.png"
+            }
+        });
 
         // initial map
         $scope.map = {
@@ -11,14 +19,7 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantServi
                 longitude: 2
             },
             zoom: 8,
-            markers: _.map(restaurants.models, function(rest) {
-                return {
-                    latitude: rest.getLocation().latitude,
-                    longitude: rest.getLocation().longitude,
-                    title: rest.getName(),
-                    icon: "images/pin.png"
-                }
-            }),
+            markers: initialMarkers,
             doCluster: true,
             clusterOptions: {
                 title: 'More restaurants here',
@@ -66,7 +67,12 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantServi
                     }
                 });
             })            
-        }    
+        };
+        
+        $scope.resetQuery = function() {
+            $scope.query = null;
+            $scope.map.markers = initialMarkers;
+        };    
     }
 ]);
 

@@ -19,6 +19,9 @@ angular.module('ExternalDataServices')
 		getLocation: function() {
     		return this.get('location');
 		},
+		getTranslationNumber: function() {
+    		return this.get('translationNumber');
+		},
 		destroyParse:function(){
 			return ParseQueryAngular(this,{functionToCall:"destroy"});
 		}

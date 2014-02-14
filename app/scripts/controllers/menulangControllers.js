@@ -8,6 +8,8 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantServi
                 latitude: rest.getLocation().latitude,
                 longitude: rest.getLocation().longitude,
                 title: rest.getName(),
+                id: rest.id,
+                translationNumber: rest.getTranslationNumber(),
                 icon: "images/pin.png"
             }
         });
@@ -49,6 +51,7 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantServi
             };
             marker.onClicked = function () {
                 marker.showWindow = true;
+                // load translations
             };
         });    
         
@@ -63,6 +66,7 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantServi
                         latitude: rest.getLocation().latitude,
                         longitude: rest.getLocation().longitude,
                         title: rest.getName(),
+                        translationNumber: rest.getTranslationNumber(),
                         icon: "images/pin.png"
                     }
                 });

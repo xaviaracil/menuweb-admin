@@ -23,8 +23,8 @@
     <markers models="map.markers" coords="'self'" click="'onClicked'" icon="'icon'" 
              doCluster="map.doCluster" clusterOptions="map.clusterOptions">
         <windows show="'showWindow'" closeClick="'closeClick'">
-            <h2 ng-non-bindable> {{ title }}</h2>
-            <p class="muted">Available translations:<span class="badge">4</span></p>
+            <h3 ng-non-bindable> {{ title }}</h3>
+            <p ng-non-bindable class="muted">Languages: <span class="badge" id="tanslations_{{id}}">{{ translationNumber }}</span></p>
         </windows>
     </markers>
   </google-map>

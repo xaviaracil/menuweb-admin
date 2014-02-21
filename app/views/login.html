@@ -1,0 +1,15 @@
+<div class="container">
+
+    <form novalidate class="form-signin" role="form">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <input type="text" class="form-control" placeholder="Username" ng-model="credentials.name" required autofocus autocomplete="off">
+        <input type="password" class="form-control" placeholder="Password" ng-model="credentials.password" required autocomplete="off">
+        <button class="btn btn-lg btn-primary btn-block" ng-click="login(credentials)">Login</button>
+    </form>
+    
+    <div class="alert alert-danger alert-dismissable" ng-show="errorMsg">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{ errorMsg }}
+    </div>
+
+</div> <!-- /container -->

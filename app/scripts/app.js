@@ -6,6 +6,8 @@ angular.module('menulangApp', [
   'ngSanitize',
   'ParseServices',
   'menulangControllers',
+  'loginControllers',
+  'adminControllers',
   'ExternalDataServices',
   'google-maps'
 ])
@@ -26,6 +28,14 @@ angular.module('menulangApp', [
 
                 }]
             }
+        }).
+        when('/dashboard', {
+            templateUrl: 'views/admin.html',
+            controller: 'AdminCtrl'
+        }).
+        when('/login', {
+            templateUrl: 'views/login.html',
+            controller: 'LoginCtrl'
         }).
         otherwise({
             redirectTo: '/restaurants'

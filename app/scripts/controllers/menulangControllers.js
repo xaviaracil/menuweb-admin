@@ -79,9 +79,3 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantServi
         };    
     }
 ]);
-
-menulangControllers.controller('RestaurantDetailsCtrl', ['$scope', 'RestaurantService', 'restaurant',
-    function($scope, RestaurantService, restaurant) {
-        $scope.restaurant = restaurant;
-    }
-]);

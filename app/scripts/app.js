@@ -16,18 +16,7 @@ angular.module('menulangApp', [
     $routeProvider.
         when('/restaurants', {
             templateUrl: 'views/restaurant-list.html',
-            controller: 'RestaurantListCtrl',
-            resolve: {
-                'restaurants': ['RestaurantService', function(RestaurantService) {
-
-                    // get the collection from our data definitions
-                    var restaurants = new RestaurantService.collection();
-
-                    // use the extended Parse SDK to load the whole collection
-                    return restaurants.load();
-
-                }]
-            }
+            controller: 'RestaurantListCtrl'
         }).
         when('/dashboard', {
             templateUrl: 'views/admin.html',

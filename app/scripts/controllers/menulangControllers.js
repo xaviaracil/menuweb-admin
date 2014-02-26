@@ -1,18 +1,27 @@
 var menulangControllers = angular.module('menulangControllers', []);
 
-menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantService', 'restaurants',
-    function($scope, RestaurantService, restaurants) {
-        $scope.restaurants = restaurants;
-        var initialMarkers = _.map(restaurants.models, function(rest) {
-            return {
-                latitude: rest.getLocation().latitude,
-                longitude: rest.getLocation().longitude,
-                title: rest.getName(),
-                id: rest.id,
-                translationNumber: rest.getTranslationNumber(),
-                icon: "images/pin.png"
-            }
+menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantService',
+    function($scope, RestaurantService) {
+        
+        // get the collection from our data definitions
+        var restaurants = new RestaurantService.collection();
+
+        // use the extended Parse SDK to load the whole collection
+        restaurants.load().then(function(foundRestaurants) {
+            $scope.restaurants = restaurants;
+            $scope.map.markers = _.map(restaurants.models, function(rest) {
+                return {
+                    latitude: rest.getLocation().latitude,
+                    longitude: rest.getLocation().longitude,
+                    title: rest.getName(),
+                    id: rest.id,
+                    translationNumber: rest.getTranslationNumber(),
+                    icon: "images/pin.png"
+                }
+            });
+            
         });
+
 
         // initial map
         $scope.map = {
@@ -21,7 +30,7 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', 'RestaurantServi
                 longitude: 2
             },
             zoom: 8,
-            markers: initialMarkers,
+            markers: [],
             doCluster: true,
             clusterOptions: {
                 title: 'More restaurants here',

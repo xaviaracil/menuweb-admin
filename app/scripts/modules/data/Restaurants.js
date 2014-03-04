@@ -22,6 +22,9 @@ angular.module('ExternalDataServices')
 		getTranslationNumber: function() {
     		return this.get('translationNumber');
 		},
+		getTranslated: function() {
+    		return this.get('translated');
+		},
 		destroyParse:function(){
 			return ParseQueryAngular(this,{functionToCall:"destroy"});
 		}
@@ -35,6 +38,19 @@ angular.module('ExternalDataServices')
 		loadRestaurantsWithName: function(name) {
 			this.query = (new Parse.Query(Restaurant));
 			this.query.contains('normalizedName', name.toLowerCase());
+			// use the enhanced load() function to fetch the collection
+			return this.load();
+		},
+		loadPendingRestaurants: function(name) {
+			this.query = (new Parse.Query(Restaurant));
+			this.query.equalTo('translated', false);
+			this.query.descending('name');
+			// use the enhanced load() function to fetch the collection
+			return this.load();
+		},
+		loadRestaurantsOrderedByName: function(name) {
+			this.query = (new Parse.Query(Restaurant));
+			this.query.descending('name');
 			// use the enhanced load() function to fetch the collection
 			return this.load();
 		},

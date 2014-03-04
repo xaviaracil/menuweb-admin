@@ -9,7 +9,8 @@ angular.module('menulangApp', [
   'loginControllers',
   'adminControllers',
   'ExternalDataServices',
-  'google-maps'
+  'google-maps',
+  'ngGrid'
 ])
 
 .config(['$routeProvider', function($routeProvider) {

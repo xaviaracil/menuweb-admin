@@ -8,15 +8,14 @@
 </div>
 
 <div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
+  <h1>Menu - Web</h1>
   <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
+    Admin Dashboard
   </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#">Splendid!</a></p>
 </div>
 
 <div class="row marketing">
+  <div class="gridStyle" ng-grid="gridOptions"></div>
   <div ng-repeat="thing in awesomeThings">
     <h4>{{thing}}</h4>
   </div>

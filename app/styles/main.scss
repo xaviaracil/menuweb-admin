@@ -71,6 +71,18 @@ body {
 // google maps
 .angular-google-map-container { height: 400px; }
 
+// ng-grid
+.gridStyle {
+    border: 1px solid rgb(212,212,212);
+    width: 90%; 
+    height: 300px;
+}
+
+.red {
+    color: #fff;
+    background-color:#d9534f;
+}
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
     .container {

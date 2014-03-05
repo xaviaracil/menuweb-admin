@@ -1,4 +1,5 @@
-<div ng-style="{ 'cursor': row.cursor }" ng-repeat="col in renderedColumns" ng-class="[ col.colIndex(), (row.getProperty('completed') ? '' : 'red')]" class="ngCell {{col.cellClass}}">
-    <div class="ngVerticalBar" ng-style="{height: rowHeight}" ng-class="{ ngVerticalBarVisible: !$last }">&nbsp;</div>
+<div style="height: 100%" ng-class="{red: !row.getProperty('completed')}">
+    <div ng-style="{ 'cursor': row.cursor }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell ">
+    <div class="ngVerticalBar" ng-style="{height: rowHeight}" ng-class="{ ngVerticalBarVisible: !$last }"> </div>
     <div ng-cell></div>
-</div>
+</div></div>

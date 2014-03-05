@@ -23,6 +23,10 @@ angular.module('menulangApp', [
             templateUrl: 'views/admin.html',
             controller: 'AdminCtrl'
         }).
+        when('/dashboard/restaurants/:id', {
+            templateUrl: 'views/admin-restaurant.html',
+            controller: 'AdminRestaurantCtrl'            
+        }).
         when('/login', {
             templateUrl: 'views/login.html',
             controller: 'LoginCtrl'

@@ -1,3 +1,25 @@
+<ion-view title="'Restaurants'" right-buttons="rightButtons">
+<ion-side-menus>
+  <!-- Center content -->
+  <ion-pane ion-side-menu-content>
+  <google-map center='map.center' zoom='map.zoom' draggable="true" options='{streetViewControl:false}'>
+    <markers models="map.markers" coords="'self'" click="'onClicked'" icon="'icon'" 
+             doCluster="map.doCluster" clusterOptions="map.clusterOptions">
+        <windows show="'showWindow'" closeClick="'closeClick'">
+            <h3 ng-non-bindable> {{ title }}</h3>
+            <p ng-non-bindable class="muted">Languages: <span class="badge" id="tanslations_{{id}}">{{ translationNumber }}</span></p>
+        </windows>
+    </markers>
+  </google-map>
+    </ion-pane>
+
+  <!-- Right menu -->
+  <ion-side-menu side="right">
+  </ion-side-menu>
+</ion-side-menus>
+
+
+<!--
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container-fluid">
         <div class="row">
@@ -17,19 +39,11 @@
         </div>
     </div>
 </nav>
+-->
 
-<div class="row marketing">
-  <google-map center='map.center' zoom='map.zoom' draggable="true" options='{streetViewControl:false}'>
-    <markers models="map.markers" coords="'self'" click="'onClicked'" icon="'icon'" 
-             doCluster="map.doCluster" clusterOptions="map.clusterOptions">
-        <windows show="'showWindow'" closeClick="'closeClick'">
-            <h3 ng-non-bindable> {{ title }}</h3>
-            <p ng-non-bindable class="muted">Languages: <span class="badge" id="tanslations_{{id}}">{{ translationNumber }}</span></p>
-        </windows>
-    </markers>
-  </google-map>
-</div>
-
+</ion-view>
+<!--
 <div class="footer">
   <p>&copy; Menu-web: Restaurants in your language</p>
 </div>
+-->

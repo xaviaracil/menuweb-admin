@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('menulangApp', [
-  'ngRoute',
+  'ionic',
   'ngCookies',
   'ngSanitize',
   'ParseServices',
@@ -10,32 +10,38 @@ angular.module('menulangApp', [
   'adminControllers',
   'ExternalDataServices',
   'google-maps',
-  'ngGrid'
 ])
 
-.config(['$routeProvider', function($routeProvider) {
-    $routeProvider.
-        when('/restaurants', {
+.config(function($stateProvider, $urlRouterProvider) {
+    $stateProvider
+        .state('restaurants', {
+            url: "/restaurants",
             templateUrl: 'views/restaurant-list.html',
             controller: 'RestaurantListCtrl'
-        }).
-        when('/dashboard', {
+        })
+        
+        .state('dashboard', {
+            url: "/dashboard",
             templateUrl: 'views/admin.html',
             controller: 'AdminCtrl'
-        }).
-        when('/dashboard/restaurants/:id', {
+        })
+        
+        .state('dashboard.restaurants/:id', {
+            url: "/restaurants",
             templateUrl: 'views/admin-restaurant.html',
             controller: 'AdminRestaurantCtrl'            
-        }).
-        when('/login', {
+        })
+        .state('login', {
+            url: "/login",
             templateUrl: 'views/login.html',
             controller: 'LoginCtrl'
-        }).
-        otherwise({
-            redirectTo: '/restaurants'
         });
+    
+    // if none of the above states are matched, use this as the fallback
+    $urlRouterProvider.otherwise('/restaurants');
+
     }
-])
+)
 
 .run(['ParseSDK', 'ExtendParseSDK', '$rootScope', function(ParseService, ExtendParseSDK, $rootScope) {
 }]);

@@ -41,7 +41,7 @@ adminControllers.controller('AdminCtrl', ['$scope', '$location', 'ParseQueryAngu
     }
 ]);
 
-adminControllers.controller('AdminRestaurantCtrl', ['$scope', '$location', '$routeParams', 'ParseQueryAngular', 'RestaurantService',
+adminControllers.controller('AdminRestaurantCtrl', ['$scope', '$location', '$stateParams', 'ParseQueryAngular', 'RestaurantService',
     function($scope, $location, $routeParams, ParseQueryAngular, RestaurantService) {
         var currentUser = Parse.User.current();
         if (!currentUser) {
@@ -51,7 +51,7 @@ adminControllers.controller('AdminRestaurantCtrl', ['$scope', '$location', '$rou
         }
 
         var restaurant = new RestaurantService.model();
-        restaurant.id = $routeParams.id;
+        restaurant.id = $stateParams.id;
         restaurant.load().then(function(rest) {
             $scope.restaurant = rest;
         });

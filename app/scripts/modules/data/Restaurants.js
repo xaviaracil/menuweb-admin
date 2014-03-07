@@ -54,6 +54,13 @@ angular.module('ExternalDataServices')
 			// use the enhanced load() function to fetch the collection
 			return this.load();
 		},
+		loadRestaurantsWithinGeoBox: function(point) {
+			this.query = (new Parse.Query(Restaurant));
+		    // TODO: geopoint query
+			this.query.withinKilometers('location', point, 10);
+			// use the enhanced load() function to fetch the collection
+			return this.load();
+		},
 		addRestaurant: function(name) {
 	 		// save request_id to Parse
 	 		var _this = this;

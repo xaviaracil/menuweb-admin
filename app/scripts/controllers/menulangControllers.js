@@ -12,10 +12,8 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', '$ionicLoading',
                 }
             }
         ];
-
-        // Show the loading overlay and text
-        $scope.loading = $ionicLoading.show({
-    
+        
+        var loadingOptions = {
           // The text to display in the loading indicator
           content: 'Loading',
     
@@ -30,8 +28,11 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', '$ionicLoading',
           maxWidth: 200,
     
           // The delay in showing the indicator
-          showDelay: 500
-        });
+          showDelay: 500            
+        };
+
+        // Show the loading overlay and text
+        $scope.loading = $ionicLoading.show(loadingOptions);
             
         // get the collection from our data definitions
         var restaurants = new RestaurantService.collection();
@@ -39,19 +40,8 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', '$ionicLoading',
 
         // use the extended Parse SDK to load the whole collection
         restaurants.load().then(function(foundRestaurants) {
-            $scope.restaurants = restaurants;
-            initialMarkers = _.map(restaurants.models, function(rest) {
-                return {
-                    latitude: rest.getLocation().latitude,
-                    longitude: rest.getLocation().longitude,
-                    title: rest.getName(),
-                    id: rest.id,
-                    translationNumber: rest.getTranslationNumber(),
-                    icon: "images/pin.png"
-                }
-            });
-            $scope.map.markers = initialMarkers;
-            $scope.loading.hide();
+            $scope.updateMarkers(foundRestaurants);            
+            initialMarkers = $scope.map.markers;
         });
 
 
@@ -81,7 +71,9 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', '$ionicLoading',
                 $scope.map.center = position.coords;
                 $scope.map.zoom = 15;
                 
-                // TODO: reload restaurants from location                
+                // reload restaurants from location                
+                $scope.loading.show(loadingOptions);
+                restaurants.loadRestaurantsWithinGeoBox(position.coords).then($scope.updateMarkers);
                 $scope.$apply();
             });
         } 
@@ -92,32 +84,37 @@ menulangControllers.controller('RestaurantListCtrl', ['$scope', '$ionicLoading',
                 $scope.$apply();
             };
             marker.onClicked = function () {
-                marker.showWindow = true;
+                // marker.showWindow = true;
                 // load translations
             };
         });    
         
         // event handlers
         $scope.find = function(text) {
+            $scope.loading.show(loadingOptions);
             $scope.query = text;
             var foundRestaurantsPromise = restaurants.loadRestaurantsWithName(text);
-            // update markers
-            foundRestaurantsPromise.then(function(foundRestaurants) {
-                $scope.map.markers = _.map(foundRestaurants.models, function(rest) {
-                    return {
-                        latitude: rest.getLocation().latitude,
-                        longitude: rest.getLocation().longitude,
-                        title: rest.getName(),
-                        translationNumber: rest.getTranslationNumber(),
-                        icon: "images/pin.png"
-                    }
-                });
-            })            
+            // update markers && hide loading
+            foundRestaurantsPromise.then($scope.updateMarkers);            
         };
         
         $scope.resetQuery = function() {
             $scope.query = null;
             $scope.map.markers = initialMarkers;
         };    
+        
+        $scope.updateMarkers = function(someRestaurants) {
+            $scope.map.markers = _.map(someRestaurants.models, function(rest) {
+                return {
+                    latitude: rest.getLocation().latitude,
+                    longitude: rest.getLocation().longitude,
+                    title: rest.getName(),
+                    translationNumber: rest.getTranslationNumber(),
+                    icon: "images/pin.png",
+                    logoUrl: "images/pin.png" // TODO change
+                }
+            });
+            $scope.loading.hide();
+        }
     }
 ]);

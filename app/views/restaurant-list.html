@@ -5,9 +5,18 @@
   <google-map center='map.center' zoom='map.zoom' draggable="true" options='{streetViewControl:false}'>
     <markers models="map.markers" coords="'self'" click="'onClicked'" icon="'icon'" 
              doCluster="map.doCluster" clusterOptions="map.clusterOptions">
-        <windows show="'showWindow'" closeClick="'closeClick'">
+        <windows show="'showWindow'">
+            <div class="list">
+                <a class="item item-avatar" href="#" ng-non-bindable>
+                <img src="{{ logoUrl }}">
+                <h2>{{ title }}</h2>
+                <p ng-non-bindable>Languages: <span class="badge" id="tanslations_{{id}}">{{ translationNumber }}</span></p>
+                </a>
+            </div>
+            <!--
             <h3 ng-non-bindable> {{ title }}</h3>
-            <p ng-non-bindable class="muted">Languages: <span class="badge" id="tanslations_{{id}}">{{ translationNumber }}</span></p>
+            <p ng-non-bindable>Languages: <span class="badge" id="tanslations_{{id}}">{{ translationNumber }}</span></p>
+            -->
         </windows>
     </markers>
   </google-map>
@@ -15,6 +24,18 @@
 
   <!-- Right menu -->
   <ion-side-menu side="right">
+  <!-- debug
+    <header class="bar bar-header bar-assertive">
+        <div class="title">Restaurants</div>
+    </header>
+    <ion-content has-header="true">    
+        <ion-list>
+            <ion-item ng-repeat="rest in map.markers">
+            {{ rest.title }}
+            </ion-item>
+        </ion-list>
+    </ion-content>
+    -->
   </ion-side-menu>
 </ion-side-menus>
 

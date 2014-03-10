@@ -4,12 +4,13 @@ angular.module('menulangApp', [
   'ionic',
   'ngCookies',
   'ngSanitize',
-  'ParseServices',
   'menulangControllers',
   'loginControllers',
   'adminControllers',
+  'ParseServices',
   'ExternalDataServices',
   'google-maps',
+  'ngGrid'
 ])
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -40,8 +41,7 @@ angular.module('menulangApp', [
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/restaurants');
 
-    }
-)
+})
 
 .run(['ParseSDK', 'ExtendParseSDK', '$rootScope', function(ParseService, ExtendParseSDK, $rootScope) {
 }]);

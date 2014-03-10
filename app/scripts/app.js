@@ -1,26 +1,24 @@
 'use strict';
 
-angular.module('menulangApp', [
-  'ionic',
+angular.module('menuwebAdminApp', [
+  'menuweb.login.controllers',
+  'menuweb.admin.controllers',
   'ngCookies',
   'ngSanitize',
-  'menulangControllers',
-  'loginControllers',
-  'adminControllers',
   'ParseServices',
   'ExternalDataServices',
   'google-maps',
-  'ngGrid'
+  'ngGrid',
+  'ui.router'
 ])
 
 .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
-        .state('restaurants', {
-            url: "/restaurants",
-            templateUrl: 'views/restaurant-list.html',
-            controller: 'RestaurantListCtrl'
+        .state('login', {
+            url: "/login",
+            templateUrl: 'views/login.html',
+            controller: 'LoginCtrl'
         })
-        
         .state('dashboard', {
             url: "/dashboard",
             templateUrl: 'views/admin.html',
@@ -32,14 +30,15 @@ angular.module('menulangApp', [
             templateUrl: 'views/admin-restaurant.html',
             controller: 'AdminRestaurantCtrl'            
         })
-        .state('login', {
-            url: "/login",
-            templateUrl: 'views/login.html',
-            controller: 'LoginCtrl'
+        .state('restaurants/:id', {
+            url: "/restaurants",
+            templateUrl: 'views/restaurant-info.html',
+            controller: 'RestaurantListCtrl'
         });
+        
     
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/restaurants');
+    $urlRouterProvider.otherwise('/dashboard');
 
 })
 

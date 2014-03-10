@@ -1,4 +1,4 @@
-var loginControllers = angular.module('loginControllers', []);
+var loginControllers = angular.module('menuweb.login.controllers', []);
 
 loginControllers.controller('LoginCtrl', ['$scope', '$location', 'ParseQueryAngular',
     function($scope, $location, ParseQueryAngular) {

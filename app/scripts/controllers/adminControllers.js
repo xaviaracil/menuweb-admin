@@ -1,4 +1,4 @@
-var adminControllers = angular.module('adminControllers', []);
+var adminControllers = angular.module('menuweb.admin.controllers', []);
 
 adminControllers.controller('AdminCtrl', ['$scope', '$location', 'ParseQueryAngular', 'RestaurantService',
     function($scope, $location, ParseQueryAngular, RestaurantService) {
@@ -13,7 +13,6 @@ adminControllers.controller('AdminCtrl', ['$scope', '$location', 'ParseQueryAngu
         $scope.gridOptions = { 
             data: 'restaurants',
             columnDefs: [
-                {field: 'id', displayName: 'id'},
                 {field: 'name', displayName: 'Name'},
                 {field: 'translations', displayName:'Translations'},
                 {field: 'completed', displayName:'Completed?'},                

@@ -1,4 +1,6 @@
-<div class="alert alert-danger alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    {{ translationId }}
+<div class="page-header">
+  <h1>Dishes <small>for {{ currentRestaurant }} and language {{ currentLanguage }}</h1>
+</div>
+<div class="row">
+  <div class="gridStyle" ng-grid="gridOptions"></div>
 </div>

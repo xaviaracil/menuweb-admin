@@ -79,8 +79,8 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', 'Pa
     }
 ]);
 
-adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'TranslationService',
-    function($scope, $state, $stateParams, ParseQueryAngular, TranslationService) {
+adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', 'TranslatedDishesService',
+    function($scope, $state, $stateParams, ParseQueryAngular, RestaurantService, TranslationService, TranslatedDishesService) {
         var currentUser = Parse.User.current();
         if (!currentUser) {
             console.log('not logged in');
@@ -88,7 +88,53 @@ adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$state
             return;
         }
         
+        // only for debug purposes
         $scope.translationId = $stateParams.translationId;
+        
+        $scope.dishes = [];
+        $scope.currentDish = [];
+        $scope.gridOptions = { 
+            data: 'dishes',
+            enableCellSelection: true,
+            enableCellEditOnFocus: true,
+            multiSelect: false,
+            selectedItems: $scope.currentDish,
+            columnDefs: [
+                {field: 'name', displayName: 'Name', enableCellEdit: false},
+                {field: 'translation', displayName:'Translation', enableCellEdit: true},
+            ],
+            showColumnMenu: true,
+        };
+                                         
+        // get the collection from our data definitions
+        var dishes = new TranslatedDishesService.collection();
+        var translation = new TranslationService.model();
+        translation.id = $stateParams.translationId;
+        translation.load().then(function(translation) {
+            $scope.currentLanguage = translation.getLanguage();
+            var restaurant = new RestaurantService.model();
+            restaurant.id = translation.get("restaurant").id;
+            restaurant.load().then(function(restaurant) {
+                $scope.currentRestaurant = restaurant.getName();
+            });
+        });
+        dishes.loadDishesOfTranslation(translation).then(function(foundDishes) {
+            $scope.dishes = _.map(foundDishes.models, function(dish) {
+                return {
+                    id: dish.id,
+                    name: dish.get('dish').get('name'),
+                    translation: dish.getName(),
+                    model: dish
+                };
+            });
+        }); 
+        $scope.$on('ngGridEventEndCellEdit', function() {
+            var gridSelection = $scope.currentDish[0];
+            if (gridSelection.translation !== gridSelection.model.getName()) {
+                gridSelection.model.setName(gridSelection.translation);
+                gridSelection.model.saveParse(); // TODO check for result and display an alert if not saved
+            }
+        });
     }
 ]);
 

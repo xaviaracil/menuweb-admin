@@ -1,7 +1,7 @@
 var adminControllers = angular.module('menuweb.admin.controllers', []);
 
-adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'ParseQueryAngular', 'RestaurantService', 'TranslationService',
-    function($scope, $state, ParseQueryAngular, RestaurantService, TranslationService) {
+adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', '$rootScope', 
+    function($scope, $state, ParseQueryAngular, RestaurantService, TranslationService, $rootScope) {
         var currentUser = Parse.User.current();
         if (!currentUser) {
             console.log('not logged in');
@@ -10,6 +10,8 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
         }
 
         $scope.goToTranslation = function(row) {
+            $rootScope.currentTranslation = row.getProperty('model');
+            $rootScope.currentRestaurant = row.getProperty('restaurant');
             $state.go('.translation', {translationId: row.getProperty('id')});
             return false;
         }
@@ -35,7 +37,9 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
                     id: translation.id,
                     language: translation.getLanguage(),
                     completed: translation.getCompleted(),
-                    name: translation.get("restaurant").getName()
+                    name: translation.get("restaurant").getName(),
+                    model: translation,
+                    restaurant: translation.get("restaurant")
                 };
             });
         });        
@@ -110,14 +114,7 @@ adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$state
         var dishes = new TranslatedDishesService.collection();
         var translation = new TranslationService.model();
         translation.id = $stateParams.translationId;
-        translation.load().then(function(translation) {
-            $scope.currentLanguage = translation.getLanguage();
-            var restaurant = new RestaurantService.model();
-            restaurant.id = translation.get("restaurant").id;
-            restaurant.load().then(function(restaurant) {
-                $scope.currentRestaurant = restaurant.getName();
-            });
-        });
+
         dishes.loadDishesOfTranslation(translation).then(function(foundDishes) {
             $scope.dishes = _.map(foundDishes.models, function(dish) {
                 return {

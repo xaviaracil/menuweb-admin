@@ -27,4 +27,14 @@
             <button type="submit" class="btn btn-primary" ng-click="save(restaurant)">Save</button>
         </div>
     </div>
+    <div class="panel panel-info" ng-show="saving">        
+        <div class="panel-heading">{{ progessAction }}</div>
+        <div class="panel-body">
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;">
+                <span class="sr-only">{{progress}}% Complete</span>
+              </div>
+            </div>
+        </div>
+    </div>
 </form>

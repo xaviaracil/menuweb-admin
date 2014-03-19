@@ -161,6 +161,8 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$location', '
             return;
         }
 
+        $scope.saving = false;
+        $scope.progress = 0;
         $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
         $scope.dishes = _(10).times(function(n) { 
             return {name: 'Put dish name here', edited:false};
@@ -185,20 +187,29 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$location', '
         };
 
         $scope.save = function(restaurant) {
-            console.log(restaurant);
-            console.log('Saving new restaurant with name ' + restaurant.name);
-
+            $scope.saving = true;
+            $scope.progessAction = 'Creating restaurant ' + restaurant.name;
+            var steps = 1 + 1 + _.size(_.filter($scope.dishes, function(dish) {return dish.edited && dish.name && dish.name != ''; }));
+            var currentStep = 1;
+            $scope.progress = (currentStep * 100) / steps;
+            console.log(currentStep + ' of ' + steps + ':' + $scope.progress);
             var newRestaurant = new RestaurantService.model();
             newRestaurant.setName(restaurant.name);
             newRestaurant.saveParse().then(function(savedRestaurant){
+                $scope.progress = (++currentStep * 100) / steps;
+                $scope.progessAction = 'Creating translation ' + restaurant.language;
+                console.log(currentStep + ' of ' + steps + ':' + $scope.progress);
                 var translation = new TranslationService.model();
                 translation.setLanguage(restaurant.language);    
                 translation.setCompleted(true);    
                 translation.setRestaurant(savedRestaurant);
                 translation.saveParse().then(function(savedTranslation) {
                     // dishes and translated dished with initial language
-                    _.each($scope.dishes, function(dish) {
+                    _.each($scope.dishes, function(dish, index) {
                         if (dish.edited && dish.name && dish.name != '') {
+                            $scope.progress = (++currentStep * 100) / steps;
+                            $scope.progessAction = 'Creating dish ' + dish.name;
+                            console.log(currentStep + ' of ' + steps + ':' + $scope.progress);
                             var newDish = new DishesService.model();
                             newDish.setName(dish.name);
                             newDish.saveParse().then(function(savedDish) {
@@ -206,7 +217,12 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$location', '
                                 translatedDish.setDish(savedDish);
                                 translatedDish.setTranslation(savedTranslation);
                                 translatedDish.setName(savedDish.getName());
-                                translatedDish.saveParse();
+                                translatedDish.saveParse().then(function() {
+                                    if(currentStep == steps) {
+                                        $scope.progress = 100;
+                                        $scope.progessAction = 'Created!';
+                                    } 
+                                });
                             });
                         }
                     });

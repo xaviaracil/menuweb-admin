@@ -107,7 +107,7 @@ adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$state
                 {field: 'name', displayName: 'Name', enableCellEdit: false},
                 {field: 'translation', displayName:'Translation', enableCellEdit: true},
             ],
-            showColumnMenu: true,
+            showColumnMenu: true
         };
                                          
         // get the collection from our data definitions
@@ -152,8 +152,8 @@ adminControllers.controller('AdminRestaurantCtrl', ['$scope', '$location', '$sta
     }
 ]);
 
-adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$location', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'TranslationService',
-    function($scope, $location, $routeParams, ParseQueryAngular, RestaurantService, TranslationService) {
+adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$location', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', 'DishesService', 'TranslatedDishesService',
+    function($scope, $location, $routeParams, ParseQueryAngular, RestaurantService, TranslationService, DishesService, TranslatedDishesService) {
         var currentUser = Parse.User.current();
         if (!currentUser) {
             console.log('not logged in');
@@ -165,28 +165,28 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$location', '
         $scope.dishes = _(10).times(function(n) { 
             return {name: 'Put dish name here', edited:false};
         });
-        $scope.currentDish = [];
-        
+
         $scope.gridOptions = { 
             data: 'dishes',
             enableCellSelection: true,
             enableCellEditOnFocus: true,
+            enableRowSelection: false,
             multiSelect: false,
-            selectedItems: $scope.currentDish,
             columnDefs: [
                 {field: 'name', displayName: 'Name', enableCellEdit: true}
             ],
-            showColumnMenu: true
+            beforeSelectionChange: function(rowItem, event) {
+                if (!rowItem.entity.edited) {
+                    rowItem.entity.name = '';
+                    rowItem.entity.edited = true;
+                }
+                return true;
+            }
         };
 
         $scope.save = function(restaurant) {
             console.log(restaurant);
             console.log('Saving new restaurant with name ' + restaurant.name);
-            _.each($scope.dishes, function(dish) {
-                if (dish.edited) {
-                    console.log("Dish " + dish.name);
-                }
-            });
 
             var newRestaurant = new RestaurantService.model();
             newRestaurant.setName(restaurant.name);
@@ -195,21 +195,30 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$location', '
                 translation.setLanguage(restaurant.language);    
                 translation.setCompleted(true);    
                 translation.setRestaurant(savedRestaurant);
-                translation.saveParse();
+                translation.saveParse().then(function(savedTranslation) {
+                    // dishes and translated dished with initial language
+                    _.each($scope.dishes, function(dish) {
+                        if (dish.edited && dish.name && dish.name != '') {
+                            var newDish = new DishesService.model();
+                            newDish.setName(dish.name);
+                            newDish.saveParse().then(function(savedDish) {
+                                var translatedDish = new TranslatedDishesService.model();
+                                translatedDish.setDish(savedDish);
+                                translatedDish.setTranslation(savedTranslation);
+                                translatedDish.setName(savedDish.getName());
+                                translatedDish.saveParse();
+                            });
+                        }
+                    });
+                });
             })
 
-            // TODO: dishes and translated dished with initial language
         };
         
         $scope.addDishes = function() {
             _(10).times(function(n) { 
-                $scope.dishes.push({name: 'Put dish name here'});
+                $scope.dishes.push({name: 'Put dish name here', edited: false});
             });
         };
-
-        $scope.$on('ngGridEventEndCellEdit', function() {
-            // TODO it doesn't work
-            $scope.currentDish[0].edited = true;
-        });
     }
 ]);

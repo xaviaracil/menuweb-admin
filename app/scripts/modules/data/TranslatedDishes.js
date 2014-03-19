@@ -17,6 +17,13 @@ angular.module('ExternalDataServices')
     		this.set('translation', translation);
     		return this;
 		},
+		setDish: function(dish) {
+    		this.set('dish', dish);
+    		return this;
+		},
+		getDish: function() {
+    		return this.get('dish');
+		},
 		destroyParse:function(){
 			return ParseQueryAngular(this,{functionToCall:"destroy"});
 		}

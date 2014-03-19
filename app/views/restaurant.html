@@ -1,0 +1,30 @@
+<div class="page-header">
+  <h1>New Restaurant</h1>
+</div>
+<form class="form-horizontal" role="form"> 
+    <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="name" placeholder="Enter Name" ng-model="restaurant.name">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="language" class="col-sm-2 control-label">Initial Language</label>
+        <div class="col-sm-10">
+            <select class="form-control" id="language" ng-model="restaurant.language" ng-options="l.id as l.name for l in languages"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="dishes" class="col-sm-2 control-label">Dishes</label>
+        <div class="col-sm-10">
+            <input type="hidden" id="dishes">
+            <div class="gridStyle" ng-grid="gridOptions"></div>
+            <a class="btn btn-info" ng-click="addDishes()"><span class="glyphicon glyphicon-plus">More dishes</a>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary" ng-click="save(restaurant)">Save</button>
+        </div>
+    </div>
+</form>

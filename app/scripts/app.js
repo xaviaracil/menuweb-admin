@@ -24,6 +24,15 @@ angular.module('menuwebAdminApp', [
             templateUrl: 'views/restaurant-list.html',
             controller: 'AdminRestaurantsListCtrl'
         })
+        .state('dashboard.restaurants.new', {
+            url: "/new",
+            views: {
+                '@dashboard': {
+                    templateUrl: 'views/restaurant.html',
+                    controller: 'AdminRestaurantsNewCtrl'
+                }
+            }
+        })
         .state('dashboard.translations', {
             url: "/translations",
             templateUrl: 'views/translation-list.html',

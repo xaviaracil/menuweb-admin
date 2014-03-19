@@ -13,6 +13,13 @@ angular.module('ExternalDataServices')
 		getLanguage: function() {
 			return this.get('language');
 		},
+		setRestaurant: function(restaurant) {
+    		this.set('restaurant', restaurant);
+    		return this;
+		},
+		getRestaurant: function() {
+    		return this.get('restaurant');
+		},
 		setCompleted: function(completed) {
     		this.set('completed', completed);
 		},

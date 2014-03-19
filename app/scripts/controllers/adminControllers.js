@@ -151,3 +151,65 @@ adminControllers.controller('AdminRestaurantCtrl', ['$scope', '$location', '$sta
         });
     }
 ]);
+
+adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$location', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'TranslationService',
+    function($scope, $location, $routeParams, ParseQueryAngular, RestaurantService, TranslationService) {
+        var currentUser = Parse.User.current();
+        if (!currentUser) {
+            console.log('not logged in');
+            $location.path('/login');
+            return;
+        }
+
+        $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
+        $scope.dishes = _(10).times(function(n) { 
+            return {name: 'Put dish name here', edited:false};
+        });
+        $scope.currentDish = [];
+        
+        $scope.gridOptions = { 
+            data: 'dishes',
+            enableCellSelection: true,
+            enableCellEditOnFocus: true,
+            multiSelect: false,
+            selectedItems: $scope.currentDish,
+            columnDefs: [
+                {field: 'name', displayName: 'Name', enableCellEdit: true}
+            ],
+            showColumnMenu: true
+        };
+
+        $scope.save = function(restaurant) {
+            console.log(restaurant);
+            console.log('Saving new restaurant with name ' + restaurant.name);
+            _.each($scope.dishes, function(dish) {
+                if (dish.edited) {
+                    console.log("Dish " + dish.name);
+                }
+            });
+
+            var newRestaurant = new RestaurantService.model();
+            newRestaurant.setName(restaurant.name);
+            newRestaurant.saveParse().then(function(savedRestaurant){
+                var translation = new TranslationService.model();
+                translation.setLanguage(restaurant.language);    
+                translation.setCompleted(true);    
+                translation.setRestaurant(savedRestaurant);
+                translation.saveParse();
+            })
+
+            // TODO: dishes and translated dished with initial language
+        };
+        
+        $scope.addDishes = function() {
+            _(10).times(function(n) { 
+                $scope.dishes.push({name: 'Put dish name here'});
+            });
+        };
+
+        $scope.$on('ngGridEventEndCellEdit', function() {
+            // TODO it doesn't work
+            $scope.currentDish[0].edited = true;
+        });
+    }
+]);

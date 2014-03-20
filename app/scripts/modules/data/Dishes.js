@@ -13,6 +13,13 @@ angular.module('ExternalDataServices')
 		getName: function() {
 			return this.get('name');
 		},
+		setRestaurant: function(restaurant) {
+    		this.set('restaurant', restaurant);
+    		return this;
+		},
+		getRestaurant: function() {
+    		return this.get('restaurant');
+		}, 
 		destroyParse:function(){
 			return ParseQueryAngular(this,{functionToCall:"destroy"});
 		}
@@ -23,17 +30,25 @@ angular.module('ExternalDataServices')
 		comparator: function(model) {
 			return -model.createdAt.getTime();
 		},
-		addDish: function(name) {
+		addDish: function(name, restaurant) {
 	 		// save request_id to Parse
 	 		var _this = this;
 
 			var dish = new Dish;
 			dish.setName(name);
+			dish.setRestaurant(restaurant);
 
 			// use the extended Parse SDK to perform a save and return the promised object back into the Angular world
-			return translation.saveParse().then(function(data){
+			return dish.saveParse().then(function(data){
 				_this.add(data);
 			})
+	 	},
+	 	loadDishesOfRestaurant: function(restaurant) {
+			this.query = (new Parse.Query(Dish));
+			this.query.equalTo('restaurant', restaurant);
+			this.query.ascending('name');
+			// use the enhanced load() function to fetch the collection
+			return this.load();    	 	
 	 	},
 	 	removeDish:function(dish) {
 	 		if (!this.get(dish)) return false;

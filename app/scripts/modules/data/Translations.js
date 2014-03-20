@@ -2,7 +2,7 @@
 angular.module('ExternalDataServices')
 
 // add a factory
-.factory('TranslationService', ['ParseQueryAngular', function(ParseQueryAngular) {
+.factory('TranslationService', ['ParseQueryAngular', 'DishesService', 'TranslatedDishesService', function(ParseQueryAngular, DishesService, TranslatedDishesService) {
 
 	var Translation = Parse.Object.extendAngular({
 		className:"Translation",
@@ -43,7 +43,7 @@ angular.module('ExternalDataServices')
 			// use the enhanced load() function to fetch the collection
 			return this.load();
 		},
-		addTranslation: function(language, restaurant) {
+		addTranslation: function(language, restaurant, $rootScope, modal) {
 	 		// save request_id to Parse
 	 		var _this = this;
 
@@ -52,10 +52,41 @@ angular.module('ExternalDataServices')
 			translation.setCompleted(false);
 			translation.setRestaurant(restaurant);
 
-			// use the extended Parse SDK to perform a save and return the promised object back into the Angular world
-			return translation.saveParse().then(function(data){
-				_this.add(data);
-			})
+            $rootScope.progessAction = 'Getting dishes of ' + restaurant.getName();
+            $rootScope.progress = 0;
+            var dishesService = new DishesService.collection();
+            dishesService.loadDishesOfRestaurant(restaurant).then(function(dishes) {
+                var steps = 1 + _.size(dishes.models);
+                var currentStep = 1;
+                $rootScope.progress = (currentStep * 100) / steps;
+                
+    
+                $rootScope.progessAction = 'Creating translation for ' + language;
+    			// use the extended Parse SDK to perform a save and return the promised object back into the Angular world
+    			return translation.saveParse().then(function(data){
+                    // create translated dish for each dish
+                    _.each(dishes.models, function(dish) {
+                        $rootScope.progress = (++currentStep * 100) / steps;
+                        $rootScope.progessAction = 'Creating initial translation for ' + dish.getName();
+                        
+                        var translatedDish = new TranslatedDishesService.model();
+                        translatedDish.setName(dish.getName());
+                        translatedDish.setTranslation(data);
+                        translatedDish.setDish(dish);
+                        translatedDish.saveParse().then(function(savedTranslatedDish) {
+                            if(currentStep == steps) {
+                                $rootScope.progress = 100;
+                                $rootScope.progessAction = 'Created!';
+    
+                                if (modal) {
+                                    $(modal).modal('hide');
+                                }
+                            } 
+                        });
+                    });
+                    _this.add(data);
+    			})
+            });
 	 	},
 	 	removeTranslation:function(translation) {
 	 		if (!this.get(translation)) return false;

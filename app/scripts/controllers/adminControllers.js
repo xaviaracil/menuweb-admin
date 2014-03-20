@@ -1,7 +1,7 @@
 var adminControllers = angular.module('menuweb.admin.controllers', []);
 
-adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', '$rootScope', 
-    function($scope, $state, ParseQueryAngular, RestaurantService, TranslationService, $rootScope) {
+adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', '$rootScope', 'DishesService', 'TranslatedDishesService',
+    function($scope, $state, ParseQueryAngular, RestaurantService, TranslationService, $rootScope, DishesService, TranslatedDishesService) {
         var currentUser = Parse.User.current();
         if (!currentUser) {
             console.log('not logged in');
@@ -52,22 +52,29 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
         restaurants.loadRestaurantsOrderedByName().then(function(foundRestaurants) {
             $scope.restaurants = foundRestaurants.models;
         });
-        
-        $scope.create = function(translationInfo) {
-            var promise = $scope.foundTranslations.addTranslation(translationInfo.language, restaurants.get(translationInfo.restaurant));
-            promise.then(function(translation) {
-                // todo add translated dishes with original dishes                
-                $scope.translations = _.map($scope.foundTranslations.models, function(translation) {
-                    return {
-                        id: translation.id,
-                        language: translation.getLanguage(),
-                        completed: translation.getCompleted(),
-                        name: translation.get("restaurant").getName(),
-                        model: translation,
-                        restaurant: translation.get("restaurant")
-                    };
-                });
+
+        $('#save-modal').on('hide.bs.modal', function(e) {
+            // reload table data                    
+            $scope.translations = _.map($scope.foundTranslations.models, function(translation) {
+                return {
+                    id: translation.id,
+                    language: translation.getLanguage(),
+                    completed: translation.getCompleted(),
+                    name: translation.get("restaurant").getName(),
+                    model: translation,
+                    restaurant: translation.get("restaurant")
+                };
             });
+        });
+        
+        $('#save-modal').on('shown.bs.modal', function(e) {
+            if (!$scope.translation) { return ;}
+            
+            $scope.foundTranslations.addTranslation($scope.translation.language, restaurants.get($scope.translation.restaurant), $rootScope, "#save-modal");
+        });
+
+        $scope.create = function() {
+            $('#save-modal').modal('show');
         }
              
     }
@@ -243,6 +250,7 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
 
                             var newDish = new DishesService.model();
                             newDish.setName(dish.name);
+                            newDish.setRestaurant(savedRestaurant);
                             newDish.saveParse().then(function(savedDish) {
                                 var translatedDish = new TranslatedDishesService.model();
                                 translatedDish.setDish(savedDish);

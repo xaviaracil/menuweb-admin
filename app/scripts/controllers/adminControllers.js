@@ -135,12 +135,12 @@ adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$state
     }
 ]);
 
-adminControllers.controller('AdminRestaurantCtrl', ['$scope', '$location', '$stateParams', 'ParseQueryAngular', 'RestaurantService',
-    function($scope, $location, $routeParams, ParseQueryAngular, RestaurantService) {
+adminControllers.controller('AdminRestaurantCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'RestaurantService',
+    function($scope, $state, $routeParams, ParseQueryAngular, RestaurantService) {
         var currentUser = Parse.User.current();
         if (!currentUser) {
             console.log('not logged in');
-            $location.path('/login');
+            $state.go('login');
             return;
         }
 
@@ -152,16 +152,15 @@ adminControllers.controller('AdminRestaurantCtrl', ['$scope', '$location', '$sta
     }
 ]);
 
-adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$location', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', 'DishesService', 'TranslatedDishesService',
-    function($scope, $location, $routeParams, ParseQueryAngular, RestaurantService, TranslationService, DishesService, TranslatedDishesService) {
+adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', 'DishesService', 'TranslatedDishesService','$rootScope', 
+    function($scope, $state, $routeParams, ParseQueryAngular, RestaurantService, TranslationService, DishesService, TranslatedDishesService, $rootScope) {
         var currentUser = Parse.User.current();
         if (!currentUser) {
             console.log('not logged in');
-            $location.path('/login');
+            $state.go('login');
             return;
         }
 
-        $scope.saving = false;
         $scope.progress = 0;
         $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
         $scope.dishes = _(10).times(function(n) { 
@@ -185,31 +184,36 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$location', '
                 return true;
             }
         };
+        
+        $('#save-modal').on('hidden.bs.modal', function(e) {        
+            if (!$scope.restaurant) { return ;}
+            $state.go('^');
+        });       
 
-        $scope.save = function(restaurant) {
-            $scope.saving = true;
-            $scope.progessAction = 'Creating restaurant ' + restaurant.name;
+        $('#save-modal').on('shown.bs.modal', function(e) {
+            if (!$scope.restaurant) { return ;}
+            $rootScope.progessAction = 'Creating restaurant ' + $scope.restaurant.name;
             var steps = 1 + 1 + _.size(_.filter($scope.dishes, function(dish) {return dish.edited && dish.name && dish.name != ''; }));
             var currentStep = 1;
-            $scope.progress = (currentStep * 100) / steps;
-            console.log(currentStep + ' of ' + steps + ':' + $scope.progress);
+            $rootScope.progress = (currentStep * 100) / steps;
+
             var newRestaurant = new RestaurantService.model();
-            newRestaurant.setName(restaurant.name);
+            newRestaurant.setName($scope.restaurant.name);
             newRestaurant.saveParse().then(function(savedRestaurant){
-                $scope.progress = (++currentStep * 100) / steps;
-                $scope.progessAction = 'Creating translation ' + restaurant.language;
-                console.log(currentStep + ' of ' + steps + ':' + $scope.progress);
+                $rootScope.progress = (++currentStep * 100) / steps;
+                $rootScope.progessAction = 'Creating translation ' + $scope.restaurant.language;
+
                 var translation = new TranslationService.model();
-                translation.setLanguage(restaurant.language);    
+                translation.setLanguage($scope.restaurant.language);    
                 translation.setCompleted(true);    
                 translation.setRestaurant(savedRestaurant);
                 translation.saveParse().then(function(savedTranslation) {
                     // dishes and translated dished with initial language
                     _.each($scope.dishes, function(dish, index) {
                         if (dish.edited && dish.name && dish.name != '') {
-                            $scope.progress = (++currentStep * 100) / steps;
-                            $scope.progessAction = 'Creating dish ' + dish.name;
-                            console.log(currentStep + ' of ' + steps + ':' + $scope.progress);
+                            $rootScope.progress = (++currentStep * 100) / steps;
+                            $rootScope.progessAction = 'Creating dish ' + dish.name;
+
                             var newDish = new DishesService.model();
                             newDish.setName(dish.name);
                             newDish.saveParse().then(function(savedDish) {
@@ -219,8 +223,9 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$location', '
                                 translatedDish.setName(savedDish.getName());
                                 translatedDish.saveParse().then(function() {
                                     if(currentStep == steps) {
-                                        $scope.progress = 100;
-                                        $scope.progessAction = 'Created!';
+                                        $rootScope.progress = 100;
+                                        $rootScope.progessAction = 'Created!';
+                                        $('#save-modal').modal('hide');
                                     } 
                                 });
                             });
@@ -228,7 +233,10 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$location', '
                     });
                 });
             })
-
+        });       
+        
+        $scope.save = function(restaurant) {
+            $('#save-modal').modal('show');
         };
         
         $scope.addDishes = function() {

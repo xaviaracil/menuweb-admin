@@ -43,13 +43,14 @@ angular.module('ExternalDataServices')
 			// use the enhanced load() function to fetch the collection
 			return this.load();
 		},
-		addTranslation: function(language) {
+		addTranslation: function(language, restaurant) {
 	 		// save request_id to Parse
 	 		var _this = this;
 
 			var translation = new Translation;
 			translation.setLanguage(language);
 			translation.setCompleted(false);
+			translation.setRestaurant(restaurant);
 
 			// use the extended Parse SDK to perform a save and return the promised object back into the Angular world
 			return translation.saveParse().then(function(data){

@@ -16,6 +16,8 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
             return false;
         }
         
+        $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
+
         $scope.translations = [];
         $scope.gridOptions = { 
             data: 'translations',
@@ -32,6 +34,7 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
         var translations = new TranslationService.collection();
         
         translations.loadTranslations().then(function(foundTranslations) {
+            $scope.foundTranslations = foundTranslations;
             $scope.translations = _.map(foundTranslations.models, function(translation) {
                 return {
                     id: translation.id,
@@ -42,7 +45,31 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
                     restaurant: translation.get("restaurant")
                 };
             });
-        });        
+        });   
+        
+        // get the collection from our data definitions
+        var restaurants = new RestaurantService.collection();
+        restaurants.loadRestaurantsOrderedByName().then(function(foundRestaurants) {
+            $scope.restaurants = foundRestaurants.models;
+        });
+        
+        $scope.create = function(translationInfo) {
+            var promise = $scope.foundTranslations.addTranslation(translationInfo.language, restaurants.get(translationInfo.restaurant));
+            promise.then(function(translation) {
+                // todo add translated dishes with original dishes                
+                $scope.translations = _.map($scope.foundTranslations.models, function(translation) {
+                    return {
+                        id: translation.id,
+                        language: translation.getLanguage(),
+                        completed: translation.getCompleted(),
+                        name: translation.get("restaurant").getName(),
+                        model: translation,
+                        restaurant: translation.get("restaurant")
+                    };
+                });
+            });
+        }
+             
     }
 ]);
 

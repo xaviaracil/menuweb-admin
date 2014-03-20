@@ -16,8 +16,36 @@ angular.module('menuwebAdminApp', [
     $stateProvider
         .state('login', {
             url: "/login",
-            templateUrl: 'views/login.html',
-            controller: 'LoginCtrl'
+            views: {
+                'admin@': {
+                    templateUrl: 'views/login.html',
+                    controller: 'LoginCtrl'
+                }
+            }
+        })
+        .state('logout', {
+            url: "/logout",
+            views: {
+                'admin@': {
+                    controller: 'LogoutCtrl'                
+                }
+            }
+        })
+        .state('dashboard', {
+            url: "/dashboard",
+            views: {
+                'admin': {
+                    templateUrl: 'views/admin.html',            
+                    controller: ['$scope', '$state', function($scope, $state) {
+                        var currentUser = Parse.User.current();
+                        if (!currentUser) {
+                            $state.go('login');
+                        } else {
+                            $state.go('dashboard.restaurants');
+                        }                
+                    }]
+                }
+            }            
         })
         .state('dashboard.restaurants', {
             url: "",
@@ -46,19 +74,6 @@ angular.module('menuwebAdminApp', [
                     controller: 'AdminTranslationCtrl'
                 }
             }
-        })
-        .state('dashboard', {
-            url: "/dashboard",
-            templateUrl: 'views/admin.html',            
-            controller: ['$scope', '$state', function($scope, $state) {
-                var currentUser = Parse.User.current();
-                if (!currentUser) {
-                    console.log('not logged in');
-                    $state.go('login');
-                } else {
-                    $state.go('dashboard.restaurants');
-                }                
-            }]
         })
         /*
         .state('restaurant', {

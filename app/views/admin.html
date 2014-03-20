@@ -20,25 +20,30 @@
                 <li ng-class="{active: $state.includes('restaurants')}"><a ui-sref="dashboard.restaurants">Restaurants</a></li>
                 <li ng-class="{active: $state.includes('translations')}"><a ui-sref="dashboard.translations">Translations</a></li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><p class="navbar-text navbar-right">Signed in as {{ userName }}</p></li>
+                <li><a ui-sref="logout"><span class="glyphicon glyphicon-off"></span></a></li>
+            </ul>
         </div>
     </div>
 </div>
 
 <!-- Status dialog -->
 <div ui-view class="container slide" style="padding-top:80px;"></div>
-    <div class="modal fade" id="save-modal" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Status: {{ progessAction }}</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;">
-                            <span class="sr-only">{{progress}}% Complete</span>
-                        </div>
+
+<div class="modal fade" id="save-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Status: {{ progessAction }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;">
+                        <span class="sr-only">{{progress}}% Complete</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>

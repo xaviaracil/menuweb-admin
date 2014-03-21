@@ -25,3 +25,16 @@ loginControllers.controller('LogoutCtrl', ['$scope', '$state', 'ParseQueryAngula
         $state.go('login');
     }
 ]);
+
+loginControllers.factory('isAuthenticated', ['ParseQueryAngular', '$state', '$rootScope', function(ParseQueryAngular, $state, $rootScope) {
+    return function() {
+        var currentUser = Parse.User.current();
+        if (!currentUser) {
+            $state.go('login');
+            return false;
+        } else {
+            $rootScope.userName = currentUser.getUsername();                            
+            return true;
+        }
+    }
+}]);

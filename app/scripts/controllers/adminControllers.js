@@ -1,13 +1,8 @@
 var adminControllers = angular.module('menuweb.admin.controllers', []);
 
-adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', '$rootScope', 'DishesService', 'TranslatedDishesService',
-    function($scope, $state, ParseQueryAngular, RestaurantService, TranslationService, $rootScope, DishesService, TranslatedDishesService) {
-        var currentUser = Parse.User.current();
-        if (!currentUser) {
-            console.log('not logged in');
-            $state.go('login');
-            return;
-        }
+adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', '$rootScope', 'DishesService', 'TranslatedDishesService', 'isAuthenticated',
+    function($scope, $state, ParseQueryAngular, RestaurantService, TranslationService, $rootScope, DishesService, TranslatedDishesService, isAuthenticated) {
+        if (!isAuthenticated()) { return; }
 
         $scope.goToTranslation = function(row) {
             $rootScope.currentTranslation = row.getProperty('model');
@@ -88,14 +83,11 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
     }
 ]);
 
-adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', 'ParseQueryAngular', 'RestaurantService',
-    function($scope, $state, ParseQueryAngular, RestaurantService) {
-        var currentUser = Parse.User.current();
-        if (!currentUser) {
-            console.log('not logged in');
-            $state.go('login');
-            return;
-        }
+adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', 'ParseQueryAngular', 'RestaurantService', 'isAuthenticated',
+    function($scope, $state, ParseQueryAngular, RestaurantService, isAuthenticated) {
+        if (!isAuthenticated()) { return; }
+
+        console.log('getting restaurants...');
         $scope.restaurants = [];
         $scope.gridOptions = { 
             data: 'restaurants',
@@ -113,6 +105,7 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', 'Pa
         var restaurants = new RestaurantService.collection();
         
         restaurants.loadRestaurantsOrderedByName().then(function(foundRestaurants) {
+            console.log('foound some restaruants: ' + _.size(foundRestaurants.models));
             $scope.restaurants = _.map(foundRestaurants.models, function(restaurant) {
                 return {
                     id: restaurant.id,
@@ -125,14 +118,9 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', 'Pa
     }
 ]);
 
-adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', 'TranslatedDishesService',
-    function($scope, $state, $stateParams, ParseQueryAngular, RestaurantService, TranslationService, TranslatedDishesService) {
-        var currentUser = Parse.User.current();
-        if (!currentUser) {
-            console.log('not logged in');
-            $state.go('login');
-            return;
-        }
+adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', 'TranslatedDishesService', 'isAuthenticated',
+    function($scope, $state, $stateParams, ParseQueryAngular, RestaurantService, TranslationService, TranslatedDishesService, isAuthenticated) {
+        if (!isAuthenticated()) { return; }
         
         // only for debug purposes
         $scope.translationId = $stateParams.translationId;
@@ -177,14 +165,9 @@ adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$state
     }
 ]);
 
-adminControllers.controller('AdminRestaurantCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'RestaurantService',
-    function($scope, $state, $routeParams, ParseQueryAngular, RestaurantService) {
-        var currentUser = Parse.User.current();
-        if (!currentUser) {
-            console.log('not logged in');
-            $state.go('login');
-            return;
-        }
+adminControllers.controller('AdminRestaurantCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'isAuthenticated',
+    function($scope, $state, $routeParams, ParseQueryAngular, RestaurantService, isAuthenticated) {
+        if (!isAuthenticated()) { return; }
 
         var restaurant = new RestaurantService.model();
         restaurant.id = $stateParams.id;
@@ -194,14 +177,9 @@ adminControllers.controller('AdminRestaurantCtrl', ['$scope', '$state', '$stateP
     }
 ]);
 
-adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', 'DishesService', 'TranslatedDishesService','$rootScope', 
-    function($scope, $state, $routeParams, ParseQueryAngular, RestaurantService, TranslationService, DishesService, TranslatedDishesService, $rootScope) {
-        var currentUser = Parse.User.current();
-        if (!currentUser) {
-            console.log('not logged in');
-            $state.go('login');
-            return;
-        }
+adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', 'DishesService', 'TranslatedDishesService','$rootScope', 'isAuthenticated',
+    function($scope, $state, $routeParams, ParseQueryAngular, RestaurantService, TranslationService, DishesService, TranslatedDishesService, $rootScope, isAuthenticated) {
+        if (!isAuthenticated()) { return; }
 
         $scope.progress = 0;
         $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?

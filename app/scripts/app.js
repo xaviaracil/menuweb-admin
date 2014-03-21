@@ -36,22 +36,16 @@ angular.module('menuwebAdminApp', [
             views: {
                 'admin': {
                     templateUrl: 'views/admin.html',            
-                    controller: ['$scope', '$state', '$rootScope', function($scope, $state, $rootScope) {
-                        // TODO: extract as service??
-                        var currentUser = Parse.User.current();
-                        if (!currentUser) {
-                            $state.go('login');
-                        } else {
-                            console.log('current user : ' + currentUser.getUsername());
-                            $rootScope.userName = currentUser.getUsername();                            
+                    controller: ['isAuthenticated', '$state', function(isAuthenticated, $state) {
+                        if (isAuthenticated()) {
                             $state.go('dashboard.restaurants');
-                        }                
+                        }
                     }]
                 }
             }            
         })
         .state('dashboard.restaurants', {
-            url: "",
+            url: "/restaurants",
             templateUrl: 'views/restaurant-list.html',
             controller: 'AdminRestaurantsListCtrl'
         })

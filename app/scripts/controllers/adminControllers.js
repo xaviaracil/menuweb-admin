@@ -53,24 +53,32 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
             $scope.restaurants = foundRestaurants.models;
         });
 
-        $('#save-modal').on('hide.bs.modal', function(e) {
-            // reload table data                    
-            $scope.translations = _.map($scope.foundTranslations.models, function(translation) {
-                return {
-                    id: translation.id,
-                    language: translation.getLanguage(),
-                    completed: translation.getCompleted(),
-                    name: translation.get("restaurant").getName(),
-                    model: translation,
-                    restaurant: translation.get("restaurant")
-                };
-            });
-        });
-        
         $('#save-modal').on('shown.bs.modal', function(e) {
             if (!$scope.translation) { return ;}
             
-            $scope.foundTranslations.addTranslation($scope.translation.language, restaurants.get($scope.translation.restaurant), $rootScope, "#save-modal");
+            var restaurant = restaurants.get($scope.translation.restaurant);
+            $rootScope.progessAction = 'Getting dishes of ' + restaurant.getName();
+            $rootScope.progress = 0;
+            var dishesService = new DishesService.collection();
+
+            dishesService.loadDishesOfRestaurant(restaurant).then(function(dishes) {
+                var steps = 1 + _.size(dishes.models);
+                var currentStep = 1;
+                $rootScope.progress = (currentStep * 100) / steps;
+                $scope.foundTranslations.addTranslation($scope.translation.language, restaurant, dishes,$rootScope, "#save-modal", currentStep, steps).then(function() {
+                    // reload table data                    
+                    $scope.translations = _.map($scope.foundTranslations.models, function(translation) {
+                        return {
+                            id: translation.id,
+                            language: translation.getLanguage(),
+                            completed: translation.getCompleted(),
+                            name: translation.get("restaurant").getName(),
+                            model: translation,
+                            restaurant: translation.get("restaurant")
+                        };
+                    });
+                });
+            });
         });
 
         $scope.create = function() {

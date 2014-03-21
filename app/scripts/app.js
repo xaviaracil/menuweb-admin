@@ -36,11 +36,12 @@ angular.module('menuwebAdminApp', [
             views: {
                 'admin': {
                     templateUrl: 'views/admin.html',            
-                    controller: ['$scope', '$state', function($scope, $state) {
+                    controller: ['$scope', '$state', '$rootScope', function($scope, $state, $rootScope) {
                         var currentUser = Parse.User.current();
                         if (!currentUser) {
                             $state.go('login');
                         } else {
+                            $rootScope.userName = currentUser.getUsername();                            
                             $state.go('dashboard.restaurants');
                         }                
                     }]

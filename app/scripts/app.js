@@ -37,10 +37,12 @@ angular.module('menuwebAdminApp', [
                 'admin': {
                     templateUrl: 'views/admin.html',            
                     controller: ['$scope', '$state', '$rootScope', function($scope, $state, $rootScope) {
+                        // TODO: extract as service??
                         var currentUser = Parse.User.current();
                         if (!currentUser) {
                             $state.go('login');
                         } else {
+                            console.log('current user : ' + currentUser.getUsername());
                             $rootScope.userName = currentUser.getUsername();                            
                             $state.go('dashboard.restaurants');
                         }                

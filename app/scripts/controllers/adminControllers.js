@@ -9,8 +9,22 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
             $rootScope.currentRestaurant = row.getProperty('restaurant');
             $state.go('.translation', {translationId: row.getProperty('id')});
             return false;
-        }
+        };
         
+        $scope.deleteTranslation = function(row) {
+            $scope.foundTranslations.removeTranslation(row.getProperty('model')).then(function(){
+                $scope.translations = _.map($scope.foundTranslations.models, function(translation) {
+                    return {
+                        id: translation.id,
+                        language: translation.getLanguage(),
+                        completed: translation.getCompleted(),
+                        name: translation.get("restaurant").getName(),
+                        model: translation,
+                        restaurant: translation.get("restaurant")
+                    };
+                });                
+            });
+        };
         $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
 
         $scope.translations = [];
@@ -19,9 +33,12 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
             columnDefs: [
                 {field: 'name', displayName: 'Name', cellTemplate: '<div class="ngCellText" ng-click="goToTranslation(row)">{{row.getProperty(col.field)}}</div>'},
                 {field: 'language', displayName:'Language'},
-                {field: 'completed', displayName:'Completed?'}
+                {field: 'completed', displayName:'Completed?'},
+                {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteTranslation(row)">Delete</button></div>'}
             ],
             showColumnMenu: true,
+            enableCellSelection: false,
+            enableRowSelection: false,
             rowTemplate: 'views/admin-restaurant-row.html'
         };
                                          

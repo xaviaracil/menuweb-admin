@@ -31,6 +31,21 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
             });
         };
         
+        $scope.markTranslation = function(translation, completed) {
+            translation.setCompleted(completed);
+            translation.saveParse().then(function(updatedTranslation) {
+                $scope.updateData($scope.foundTranslations);
+            });
+        };
+        
+        $scope.markAsCompleted = function(row) {
+            $scope.markTranslation(row.getProperty('model'), true);
+        };
+        
+        $scope.markAsPending = function(row) {
+            $scope.markTranslation(row.getProperty('model'), false);
+        };
+        
         $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
 
         $scope.translations = [];
@@ -40,12 +55,12 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
                 {field: 'name', displayName: 'Name', cellTemplate: '<div class="ngCellText" ng-click="goToTranslation(row)">{{row.getProperty(col.field)}}</div>'},
                 {field: 'language', displayName:'Language'},
                 {field: 'completed', displayName:'Completed?'},
-                {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteTranslation(row)">Delete</button></div>'}
+                {displayName: 'Actions', cellTemplate: 'views/templates/translation-action-cell.html'}
             ],
             showColumnMenu: true,
             enableCellSelection: false,
             enableRowSelection: false,
-            rowTemplate: 'views/admin-restaurant-row.html'
+            rowTemplate: 'views/templates/admin-restaurant-row.html'
         };
                                          
         // get the collection from our data definitions
@@ -111,7 +126,7 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', 'Pa
             ],
             showColumnMenu: true,
             afterSelectionChange: $scope.onRowSelected,
-            rowTemplate: 'views/admin-restaurant-row.html'
+            rowTemplate: 'views/templates/admin-restaurant-row.html'
         };
                                          
         // get the collection from our data definitions

@@ -10,7 +10,7 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
             $state.go('.translation', {translationId: row.getProperty('id')});
             return false;
         };
-        
+
         $scope.updateData = function(foundTranslations) {
             $scope.foundTranslations = foundTranslations;
             $scope.translations = _.map(foundTranslations.models, function(translation) {
@@ -22,34 +22,34 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
                     model: translation,
                     restaurant: translation.get("restaurant")
                 };
-            });                
+            });
         };
-        
+
         $scope.deleteTranslation = function(row) {
             $scope.foundTranslations.removeTranslation(row.getProperty('model')).then(function(){
                 $scope.updateData($scope.foundTranslations);
             });
         };
-        
+
         $scope.markTranslation = function(translation, completed) {
             translation.setCompleted(completed);
             translation.saveParse().then(function(updatedTranslation) {
                 $scope.updateData($scope.foundTranslations);
             });
         };
-        
+
         $scope.markAsCompleted = function(row) {
             $scope.markTranslation(row.getProperty('model'), true);
         };
-        
+
         $scope.markAsPending = function(row) {
             $scope.markTranslation(row.getProperty('model'), false);
         };
-        
+
         $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
 
         $scope.translations = [];
-        $scope.gridOptions = { 
+        $scope.gridOptions = {
             data: 'translations',
             columnDefs: [
                 {field: 'name', displayName: 'Name', cellTemplate: '<div class="ngCellText" ng-click="goToTranslation(row)">{{row.getProperty(col.field)}}</div>'},
@@ -62,14 +62,14 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
             enableRowSelection: false,
             rowTemplate: 'views/templates/admin-restaurant-row.html'
         };
-                                         
+
         // get the collection from our data definitions
         var translations = new TranslationService.collection();
-        
+
         translations.loadTranslations().then(function(foundTranslations) {
             $scope.updateData(foundTranslations);
-        });   
-        
+        });
+
         // get the collection from our data definitions
         var restaurants = new RestaurantService.collection();
         restaurants.loadRestaurantsOrderedByName().then(function(foundRestaurants) {
@@ -78,7 +78,7 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
 
         $('#save-modal').on('shown.bs.modal', function(e) {
             if (!$scope.translation) { return ;}
-            
+
             var restaurant = restaurants.get($scope.translation.restaurant);
             $rootScope.progessAction = 'Getting dishes of ' + restaurant.getName();
             $rootScope.progress = 0;
@@ -89,7 +89,7 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
                 var currentStep = 1;
                 $rootScope.progress = (currentStep * 100) / steps;
                 $scope.foundTranslations.addTranslation($scope.translation.language, restaurant, dishes,$rootScope, "#save-modal", currentStep, steps).then(function() {
-                    // reload table data                    
+                    // reload table data
                     $scope.translations = _.map($scope.foundTranslations.models, function(translation) {
                         return {
                             id: translation.id,
@@ -107,7 +107,7 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
         $scope.create = function() {
             $('#save-modal').modal('show');
         }
-             
+
     }
 ]);
 
@@ -116,7 +116,7 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', 'Pa
         if (!isAuthenticated()) { return; }
 
         $scope.restaurants = [];
-        $scope.gridOptions = { 
+        $scope.gridOptions = {
             data: 'restaurants',
             columnDefs: [
                 {field: 'name', displayName: 'Name'},
@@ -128,10 +128,10 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', 'Pa
             afterSelectionChange: $scope.onRowSelected,
             rowTemplate: 'views/templates/admin-restaurant-row.html'
         };
-                                         
+
         // get the collection from our data definitions
         var restaurants = new RestaurantService.collection();
-        
+
         restaurants.loadRestaurantsOrderedByName().then(function(foundRestaurants) {
             $scope.updateData(foundRestaurants);
         });
@@ -148,25 +148,25 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', 'Pa
                 };
             });
         };
-        
+
         $scope.deleteRestaurant = function(row) {
             restaurants.removeRestaurant(row.getProperty('model')).then(function() {
                 $scope.updateData($scope.foundRestaurants);
             });
-        };       
+        };
     }
 ]);
 
 adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', 'TranslatedDishesService', 'isAuthenticated',
     function($scope, $state, $stateParams, ParseQueryAngular, RestaurantService, TranslationService, TranslatedDishesService, isAuthenticated) {
         if (!isAuthenticated()) { return; }
-        
+
         // only for debug purposes
         $scope.translationId = $stateParams.translationId;
-        
+
         $scope.dishes = [];
         $scope.currentDish = [];
-        $scope.gridOptions = { 
+        $scope.gridOptions = {
             data: 'dishes',
             enableCellSelection: true,
             enableCellEditOnFocus: true,
@@ -178,7 +178,7 @@ adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$state
             ],
             showColumnMenu: true
         };
-                                         
+
         // get the collection from our data definitions
         var dishes = new TranslatedDishesService.collection();
         var translation = new TranslationService.model();
@@ -193,7 +193,7 @@ adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$state
                     model: dish
                 };
             });
-        }); 
+        });
         $scope.$on('ngGridEventEndCellEdit', function() {
             var gridSelection = $scope.currentDish[0];
             if (gridSelection.translation !== gridSelection.model.getName()) {
@@ -222,11 +222,11 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
 
         $scope.progress = 0;
         $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
-        $scope.dishes = _(10).times(function(n) { 
+        $scope.dishes = _(10).times(function(n) {
             return {name: 'Put dish name here', edited:false};
         });
 
-        $scope.gridOptions = { 
+        $scope.gridOptions = {
             data: 'dishes',
             enableCellSelection: true,
             enableCellEditOnFocus: true,
@@ -243,11 +243,11 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
                 return true;
             }
         };
-        
-        $('#save-modal').on('hidden.bs.modal', function(e) {        
+
+        $('#save-modal').on('hidden.bs.modal', function(e) {
             if (!$scope.restaurant) { return ;}
             $state.go('^');
-        });       
+        });
 
         $('#save-modal').on('shown.bs.modal', function(e) {
             if (!$scope.restaurant) { return ;}
@@ -263,8 +263,8 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
                 $rootScope.progessAction = 'Creating translation ' + $scope.restaurant.language;
 
                 var translation = new TranslationService.model();
-                translation.setLanguage($scope.restaurant.language);    
-                translation.setCompleted(true);    
+                translation.setLanguage($scope.restaurant.language);
+                translation.setCompleted(true);
                 translation.setRestaurant(savedRestaurant);
                 translation.saveParse().then(function(savedTranslation) {
                     // dishes and translated dished with initial language
@@ -286,21 +286,21 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
                                         $rootScope.progress = 100;
                                         $rootScope.progessAction = 'Created!';
                                         $('#save-modal').modal('hide');
-                                    } 
+                                    }
                                 });
                             });
                         }
                     });
                 });
             })
-        });       
-        
+        });
+
         $scope.save = function(restaurant) {
             $('#save-modal').modal('show');
         };
-        
+
         $scope.addDishes = function() {
-            _(10).times(function(n) { 
+            _(10).times(function(n) {
                 $scope.dishes.push({name: 'Put dish name here', edited: false});
             });
         };

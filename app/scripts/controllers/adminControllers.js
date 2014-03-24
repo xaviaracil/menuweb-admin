@@ -11,20 +11,26 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
             return false;
         };
         
+        $scope.updateData = function(foundTranslations) {
+            $scope.foundTranslations = foundTranslations;
+            $scope.translations = _.map(foundTranslations.models, function(translation) {
+                return {
+                    id: translation.id,
+                    language: translation.getLanguage(),
+                    completed: translation.getCompleted(),
+                    name: translation.get("restaurant") ? translation.get("restaurant").getName() : "No restaurant",
+                    model: translation,
+                    restaurant: translation.get("restaurant")
+                };
+            });                
+        };
+        
         $scope.deleteTranslation = function(row) {
             $scope.foundTranslations.removeTranslation(row.getProperty('model')).then(function(){
-                $scope.translations = _.map($scope.foundTranslations.models, function(translation) {
-                    return {
-                        id: translation.id,
-                        language: translation.getLanguage(),
-                        completed: translation.getCompleted(),
-                        name: translation.get("restaurant").getName(),
-                        model: translation,
-                        restaurant: translation.get("restaurant")
-                    };
-                });                
+                $scope.updateData($scope.foundTranslations);
             });
         };
+        
         $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
 
         $scope.translations = [];
@@ -46,17 +52,7 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
         var translations = new TranslationService.collection();
         
         translations.loadTranslations().then(function(foundTranslations) {
-            $scope.foundTranslations = foundTranslations;
-            $scope.translations = _.map(foundTranslations.models, function(translation) {
-                return {
-                    id: translation.id,
-                    language: translation.getLanguage(),
-                    completed: translation.getCompleted(),
-                    name: translation.get("restaurant").getName(),
-                    model: translation,
-                    restaurant: translation.get("restaurant")
-                };
-            });
+            $scope.updateData(foundTranslations);
         });   
         
         // get the collection from our data definitions
@@ -104,14 +100,14 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', 'Pa
     function($scope, $state, ParseQueryAngular, RestaurantService, isAuthenticated) {
         if (!isAuthenticated()) { return; }
 
-        console.log('getting restaurants...');
         $scope.restaurants = [];
         $scope.gridOptions = { 
             data: 'restaurants',
             columnDefs: [
                 {field: 'name', displayName: 'Name'},
                 {field: 'normalizedName', displayName:'normalizedName'},
-                {field: 'completed', displayName:'Translated'}
+                {field: 'completed', displayName:'Translated'},
+                {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteRestaurant(row)">Delete</button></div>'}
             ],
             showColumnMenu: true,
             afterSelectionChange: $scope.onRowSelected,
@@ -122,16 +118,27 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', 'Pa
         var restaurants = new RestaurantService.collection();
         
         restaurants.loadRestaurantsOrderedByName().then(function(foundRestaurants) {
-            console.log('foound some restaruants: ' + _.size(foundRestaurants.models));
+            $scope.updateData(foundRestaurants);
+        });
+
+        $scope.updateData = function(foundRestaurants) {
+            $scope.foundRestaurants = foundRestaurants;
             $scope.restaurants = _.map(foundRestaurants.models, function(restaurant) {
                 return {
                     id: restaurant.id,
                     name: restaurant.getName(),
                     normalizedName: restaurant.get("normalizedName"),
-                    completed: restaurant.getTranslated()
+                    completed: restaurant.getTranslated(),
+                    model: restaurant
                 };
             });
-        });        
+        };
+        
+        $scope.deleteRestaurant = function(row) {
+            restaurants.removeRestaurant(row.getProperty('model')).then(function() {
+                $scope.updateData($scope.foundRestaurants);
+            });
+        };       
     }
 ]);
 

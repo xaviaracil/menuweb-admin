@@ -111,8 +111,8 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
     }
 ]);
 
-adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', 'ParseQueryAngular', 'RestaurantService', 'isAuthenticated',
-    function($scope, $state, ParseQueryAngular, RestaurantService, isAuthenticated) {
+adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', '$rootScope', 'ParseQueryAngular', 'RestaurantService', 'isAuthenticated',
+    function($scope, $state, $rootScope, ParseQueryAngular, RestaurantService, isAuthenticated) {
         if (!isAuthenticated()) { return; }
 
         $scope.restaurants = [];
@@ -122,7 +122,7 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', 'Pa
                 {field: 'name', displayName: 'Name'},
                 {field: 'normalizedName', displayName:'normalizedName'},
                 {field: 'completed', displayName:'Translated'},
-                {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteRestaurant(row)">Delete</button></div>'}
+                {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-info" ng-click="goToDishes(row)">Dishes</button>&nbsp;<button type="button" class="btn btn-xs btn-danger" ng-click="deleteRestaurant(row)">Delete</button></div>'}
             ],
             showColumnMenu: true,
             afterSelectionChange: $scope.onRowSelected,
@@ -153,6 +153,12 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', 'Pa
             restaurants.removeRestaurant(row.getProperty('model')).then(function() {
                 $scope.updateData($scope.foundRestaurants);
             });
+        };
+
+        $scope.goToDishes = function(row) {
+            $rootScope.currentRestaurant = row.getProperty('model');
+            $state.go('.dishes', {restaurantId: row.getProperty('id')});
+            return false;
         };
     }
 ]);
@@ -305,4 +311,51 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
             });
         };
     }
+]);
+
+adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', '$rootScope', 'DishesService', 'RestaurantService', 'isAuthenticated',
+    function($scope, $state, $stateParams, ParseQueryAngular, $rootScope, DishesService, RestaurantService, isAuthenticated) {
+        if (!isAuthenticated()) { return; }
+        
+        $scope.updateData = function(foundDishes) {
+            $scope.foundDishes = foundDishes;
+            $scope.dishes = _.map(foundDishes.models, function(dish) {
+                return {
+                    id: dish.id,
+                    name: dish.getName(),
+                    model: dish
+                };
+            });
+        };
+
+        $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
+
+        $scope.dishes = [];
+        $scope.gridOptions = {
+            data: 'dishes',
+            columnDefs: [
+                {field: 'name', displayName: 'Name'},
+                {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteDish(row)">Delete</button></div>'}
+            ],
+            enableCellSelection: false,
+            enableRowSelection: false
+        };
+
+        // get the collection from our data definitions
+        var dishes = new DishesService.collection();
+        var restaurant = new RestaurantService.model();
+        restaurant.id = $stateParams.restaurantId;
+
+        dishes.loadDishesOfRestaurant(restaurant).then(function(foundDishes) {
+            $scope.updateData(foundDishes);
+        });
+        
+        $scope.deleteDish = function(row) {
+            dishes.removeDish(row.getProperty('model')).then(function() {
+                $scope.updateData($scope.foundDishes);
+            });
+            
+        };
+    }
+
 ]);

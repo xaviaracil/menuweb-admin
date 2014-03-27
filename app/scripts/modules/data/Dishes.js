@@ -44,7 +44,6 @@ angular.module('ExternalDataServices')
                 // create translated dish for translation
                 _.each(translations.models, function(translation) {
                     $rootScope.progress = (++currentStep * 100) / steps;
-                    console.log('Current progress: ' + currentStep + ' of ' + steps + ':' + $rootScope.progress);
                     $rootScope.progessAction = 'Creating translation for ' + translation.getLanguage();
                     
                     var translatedDish = new TranslatedDishesService.model();
@@ -52,7 +51,6 @@ angular.module('ExternalDataServices')
                     translatedDish.setTranslation(translation);
                     translatedDish.setDish(data);                    
                     translatedDish.saveParse().then(function(savedTranslatedDish) {
-                        console.log('Saved translation. Current progress: ' + currentStep + ' of ' + steps + ':' + $rootScope.progress);
                         if(currentStep == steps) {
                             $rootScope.progress = 100;
                             $rootScope.progessAction = 'Created!';

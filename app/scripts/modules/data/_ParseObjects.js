@@ -12,11 +12,11 @@ angular.module('ExternalDataServices',[])
 	var object = function(originalClass) {
 		originalClass.prototype = _.extend(originalClass.prototype,{
 			load:function() {
-				return ParseQueryAngular(this,{functionToCall:'fetch'});
+				return ParseQueryAngular(this,{functionToCall:'fetch'}); // jshint ignore:line
 			},
 			saveParse:function(data) {
 				if (data && typeof data === 'object') { this.set(data); }
-				return ParseQueryAngular(this,{functionToCall:'save', params:[null]});
+				return ParseQueryAngular(this,{functionToCall:'save', params:[null]});// jshint ignore:line
 			}
 		});
 		return originalClass;
@@ -25,7 +25,7 @@ angular.module('ExternalDataServices',[])
 	var collection = function(originalClass){
 		originalClass.prototype = _.extend(originalClass.prototype,{
 			load:function() {
-				return ParseQueryAngular(this,{functionToCall:'fetch'});
+				return ParseQueryAngular(this,{functionToCall:'fetch'}); // jshint ignore:line
 			}
 		});
 		return originalClass;

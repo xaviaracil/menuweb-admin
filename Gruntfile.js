@@ -211,7 +211,7 @@ module.exports = function (grunt) {
       options: {
         assetsDirs: ['<%= yeoman.dist %>'],
         patterns: {
-            js: [[/(images\/.+\.png)/, 'Replacing reference to image']]
+          js: [[/(images\/.+\.png)/, 'Replacing reference to image']]
         }
       }
     },

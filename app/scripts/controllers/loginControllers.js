@@ -10,7 +10,7 @@ loginControllers.controller('LoginCtrl', ['$scope', '$state', 'ParseQueryAngular
     };
 
     $scope.login = function(credentials) {
-      ParseQueryAngular(Parse.User, {functionToCall:'logIn', params:[credentials.name, credentials.password]}).then(function(user) {
+      ParseQueryAngular(Parse.User, {functionToCall:'logIn', params:[credentials.name, credentials.password]}).then(function(user) { // jshint ignore:line
         $rootScope.userName = user.getUsername();
         $state.go('dashboard');
       }, function(user, error) {

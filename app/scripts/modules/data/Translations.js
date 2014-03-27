@@ -28,7 +28,7 @@ angular.module('ExternalDataServices')
 			return this.get('completed');
 		},
 		destroyParse:function(){
-			return ParseQueryAngular(this,{functionToCall:'destroy'});
+			return ParseQueryAngular(this,{functionToCall:'destroy'}); // jshint ignore:line
 		}
 	});
 

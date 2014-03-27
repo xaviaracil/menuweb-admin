@@ -22,7 +22,7 @@ angular.module('ExternalDataServices')
 			return this.get('restaurant');
 		},
 		destroyParse:function(){
-			return ParseQueryAngular(this,{functionToCall:'destroy'});
+			return ParseQueryAngular(this,{functionToCall:'destroy'}); // jshint ignore:line
 		}
 	});
 

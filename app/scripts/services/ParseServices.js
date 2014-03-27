@@ -1,7 +1,8 @@
+/* global Parse */
 angular.module('ParseServices', [])
 
 .factory('ExtendParseSDK', ['ParseAbstractService', function(ParseAbstractService) {
-
+  'use strict';
   Parse.Object.extendAngular = function(options) {
     return ParseAbstractService.EnhanceObject(Parse.Object.extend(options));
   };
@@ -13,9 +14,9 @@ angular.module('ParseServices', [])
 }])
 
 .factory('ParseSDK', function() {
-
+  'use strict';
   // pro-tip: swap these keys out for PROD keys automatically on deploy using grunt-replace
-  Parse.initialize("0l9HVP7fBLbbV1Qlp1SHHAoOVYC93Boo51SbI1tf", "dOD99fLcB07AwOTmrFgZZRQvi4HfPLpJyQV6sbr9");
+  Parse.initialize('0l9HVP7fBLbbV1Qlp1SHHAoOVYC93Boo51SbI1tf', 'dOD99fLcB07AwOTmrFgZZRQvi4HfPLpJyQV6sbr9');
 
   // FACEBOOK init
 /*
@@ -34,5 +35,4 @@ angular.module('ParseServices', [])
 
   });
 */
-
 });

@@ -1,6 +1,7 @@
+/* global _, FB */
 angular.module('FacebookPatch', [])
-.factory('FacebookAngularPatch',function ($q, $timeout) { 
-
+.factory('FacebookAngularPatch',function ($q, $timeout) {
+  'use strict';
   var fbApiAngular = function() {
 
     var params = [].splice.call(arguments, 0);
@@ -8,7 +9,7 @@ angular.module('FacebookPatch', [])
     var angularWrap = $timeout;
 
     window.fbPromise.then(function(){
-      
+
       // Pushing callback function that will resolve to the params array
       params.push(function(response){
         if (!_.isUndefined(response.error)) {
@@ -23,7 +24,7 @@ angular.module('FacebookPatch', [])
         });
       });
 
-      FB.api.apply(FB, params);  
+      FB.api.apply(FB, params);
 
     });
 

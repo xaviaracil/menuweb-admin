@@ -1,22 +1,23 @@
+/* global _ */
 angular.module('ParseServices')
 
-.factory('ParseQueryAngular',['$q','$timeout',function ($q, $timeout) { 
+.factory('ParseQueryAngular',['$q','$timeout',function ($q, $timeout) {
 
-
+  'use strict';
   // we use $timeout 0 as a trick to bring resolved promises into the Angular digest
   var angularWrapper = $timeout;
 
 	return function(query,options) {
 
       // if unspecified, the default function to call is 'find'
-      var functionToCall = "find";
+      var functionToCall = 'find';
       if (!_.isUndefined(options) && !_.isUndefined(options.functionToCall)) {
         functionToCall = options.functionToCall;
       }
 
       // create a promise to return
       var defer = $q.defer();
-      
+
       // this is the boilerplate stuff that you would normally have to write for every Parse call
       var defaultParams = [{
         success:function(data) {

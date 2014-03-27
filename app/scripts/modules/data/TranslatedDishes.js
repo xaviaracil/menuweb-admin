@@ -1,11 +1,12 @@
+/* global Parse */
 // reference the module we declared earlier
 angular.module('ExternalDataServices')
 
 // add a factory
 .factory('TranslatedDishesService', ['ParseQueryAngular', function(ParseQueryAngular) {
-
+	'use strict';
 	var TranslatedDish = Parse.Object.extendAngular({
-		className:"TranslatedDish",
+		className:'TranslatedDish',
 		setName: function(name) {
 			this.set('name', name);
 			return this;
@@ -14,18 +15,18 @@ angular.module('ExternalDataServices')
 			return this.get('name');
 		},
 		setTranslation: function(translation) {
-    		this.set('translation', translation);
-    		return this;
+			this.set('translation', translation);
+			return this;
 		},
 		setDish: function(dish) {
-    		this.set('dish', dish);
-    		return this;
+			this.set('dish', dish);
+			return this;
 		},
 		getDish: function() {
-    		return this.get('dish');
+			return this.get('dish');
 		},
 		destroyParse:function(){
-			return ParseQueryAngular(this,{functionToCall:"destroy"});
+			return ParseQueryAngular(this,{functionToCall:'destroy'});
 		}
 	});
 
@@ -35,7 +36,7 @@ angular.module('ExternalDataServices')
 			return -model.createdAt.getTime();
 		},
 		loadDishesOfTranslation: function(translation) {
-			this.query = (new Parse.Query(TranslatedDish));
+			this.query = new Parse.Query(TranslatedDish);
 			this.query.include('dish');
 			this.query.equalTo('translation', translation);
 			//this.query.descending('dish.name');
@@ -43,25 +44,25 @@ angular.module('ExternalDataServices')
 			return this.load();
 		},
 		addDish: function(name, translation) {
-	 		// save request_id to Parse
-	 		var _this = this;
+			// save request_id to Parse
+			var _this = this;
 
-			var translatedDish = new TranslatedDish;
-			translation.setName(name);
-			translation.setTranslation(translation);
+			var translatedDish = new TranslatedDish();
+			translatedDish.setName(name);
+			translatedDish.setTranslation(translation);
 
 			// use the extended Parse SDK to perform a save and return the promised object back into the Angular world
-			return translation.saveParse().then(function(data){
+			return translatedDish.saveParse().then(function(data){
 				_this.add(data);
-			})
-	 	},
-	 	removeDish:function(translatedDish) {
-	 		if (!this.get(translatedDish)) return false;
-	 		var _this = this;
-	 		return translatedDish.destroyParse().then(function(){
-	 			_this.remove(translatedDish);
-	 		});
-	 	}
+			});
+		},
+		removeDish:function(translatedDish) {
+			if (!this.get(translatedDish)) { return false; }
+			var _this = this;
+			return translatedDish.destroyParse().then(function(){
+				_this.remove(translatedDish);
+			});
+		}
 	});
 
 	// Return a simple API : model or collection.

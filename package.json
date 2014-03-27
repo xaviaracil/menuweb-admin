@@ -47,5 +47,8 @@
   },
   "scripts": {
     "test": "grunt test"
+  },
+  "jshintConfig": {
+      "globals": {"Parse": false}
   }
 }

@@ -86,4 +86,5 @@ angular.module('menuwebAdminApp', [
     $urlRouterProvider.otherwise('/dashboard');
   })
 
-  .run();
+  .run(['ParseSDK', 'ExtendParseSDK', '$rootScope', function() {
+}]);

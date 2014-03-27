@@ -43,6 +43,12 @@ angular.module('ExternalDataServices')
 			// use the enhanced load() function to fetch the collection
 			return this.load();
 		},
+		loadTranslationsOfRestaurant: function(restaurant) {
+			this.query = (new Parse.Query(Translation));
+			this.query.equalTo('restaurant', restaurant);
+			// use the enhanced load() function to fetch the collection
+			return this.load();
+		},
 		addTranslation: function(language, restaurant, dishes, $rootScope, modal, currentStep, steps) {
 	 		// save request_id to Parse
 	 		var _this = this;

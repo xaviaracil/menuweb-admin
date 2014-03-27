@@ -2,7 +2,7 @@
 angular.module('ExternalDataServices')
 
 // add a factory
-.factory('DishesService', ['ParseQueryAngular', function(ParseQueryAngular) {
+.factory('DishesService', ['ParseQueryAngular', 'TranslatedDishesService', function(ParseQueryAngular, TranslatedDishesService) {
 
 	var Dish = Parse.Object.extendAngular({
 		className:"Dish",
@@ -30,7 +30,7 @@ angular.module('ExternalDataServices')
 		comparator: function(model) {
 			return -model.createdAt.getTime();
 		},
-		addDish: function(name, restaurant) {
+		addDish: function(name, restaurant, translations, $rootScope, modal, currentStep, steps) {
 	 		// save request_id to Parse
 	 		var _this = this;
 
@@ -39,8 +39,37 @@ angular.module('ExternalDataServices')
 			dish.setRestaurant(restaurant);
 
 			// use the extended Parse SDK to perform a save and return the promised object back into the Angular world
+            $rootScope.progessAction = 'Creating dish ' + name;
 			return dish.saveParse().then(function(data){
-				_this.add(data);
+                // create translated dish for translation
+                _.each(translations.models, function(translation) {
+                    $rootScope.progress = (++currentStep * 100) / steps;
+                    console.log('Current progress: ' + currentStep + ' of ' + steps + ':' + $rootScope.progress);
+                    $rootScope.progessAction = 'Creating translation for ' + translation.getLanguage();
+                    
+                    var translatedDish = new TranslatedDishesService.model();
+                    translatedDish.setName(dish.getName());
+                    translatedDish.setTranslation(translation);
+                    translatedDish.setDish(data);                    
+                    translatedDish.saveParse().then(function(savedTranslatedDish) {
+                        console.log('Saved translation. Current progress: ' + currentStep + ' of ' + steps + ':' + $rootScope.progress);
+                        if(currentStep == steps) {
+                            $rootScope.progress = 100;
+                            $rootScope.progessAction = 'Created!';
+
+                            if (modal) {
+                                $(modal).modal('hide');
+                            }
+                        } 
+                    });
+                    
+                    // update translation
+                    if (translation.getLanguage() !== restaurant.getInitialLanguage()) {
+                        translation.setCompleted(false);
+                        translation.saveParse();
+                    }
+                });
+                _this.add(data);
 			})
 	 	},
 	 	loadDishesOfRestaurant: function(restaurant) {

@@ -19,6 +19,13 @@ angular.module('ExternalDataServices')
 		getLocation: function() {
     		return this.get('location');
 		},
+		setInitialLanguage: function(initialLanguage) {
+    		this.set('initialLanguage', initialLanguage);
+    		return this;
+		},
+		getInitialLanguage: function() {
+    		return this.get('initialLanguage');
+		},
 		getTranslationNumber: function() {
     		return this.get('translationNumber');
 		},
@@ -61,12 +68,13 @@ angular.module('ExternalDataServices')
 			// use the enhanced load() function to fetch the collection
 			return this.load();
 		},
-		addRestaurant: function(name) {
+		addRestaurant: function(name, initialLanguage) {
 	 		// save request_id to Parse
 	 		var _this = this;
 
 			var restaurant = new Restaurant;
 			restaurant.setName(name);
+			restaurant.setInitialLanguage(initialLanguage);
 
 			// use the extended Parse SDK to perform a save and return the promised object back into the Angular world
 			return restaurant.saveParse().then(function(data){

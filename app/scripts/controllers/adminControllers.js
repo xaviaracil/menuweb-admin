@@ -105,6 +105,8 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
         });
 
         $scope.create = function() {
+            $rootScope.progessAction = 'Preparing...';
+            $rootScope.progress = 0;
             $('#save-modal').modal('show');
         }
 
@@ -122,7 +124,7 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', '$r
                 {field: 'name', displayName: 'Name'},
                 {field: 'normalizedName', displayName:'normalizedName'},
                 {field: 'completed', displayName:'Translated'},
-                {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-info" ng-click="goToDishes(row)">Dishes</button>&nbsp;<button type="button" class="btn btn-xs btn-danger" ng-click="deleteRestaurant(row)">Delete</button></div>'}
+                {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-info" ng-click="goToDishes(row)">Dishes</button>&nbsp;<button type="button" class="btn btn-xs btn-danger" ng-click="deleteRestaurant(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
             ],
             showColumnMenu: true,
             afterSelectionChange: $scope.onRowSelected,
@@ -264,6 +266,7 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
 
             var newRestaurant = new RestaurantService.model();
             newRestaurant.setName($scope.restaurant.name);
+            newRestaurant.setInitialLanguage($scope.restaurant.language);
             newRestaurant.saveParse().then(function(savedRestaurant){
                 $rootScope.progress = (++currentStep * 100) / steps;
                 $rootScope.progessAction = 'Creating translation ' + $scope.restaurant.language;
@@ -302,6 +305,8 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
         });
 
         $scope.save = function(restaurant) {
+            $rootScope.progessAction = 'Preparing...';
+            $rootScope.progress = 0;
             $('#save-modal').modal('show');
         };
 
@@ -313,8 +318,8 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
     }
 ]);
 
-adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', '$rootScope', 'DishesService', 'RestaurantService', 'isAuthenticated',
-    function($scope, $state, $stateParams, ParseQueryAngular, $rootScope, DishesService, RestaurantService, isAuthenticated) {
+adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', '$rootScope', 'DishesService', 'RestaurantService', 'TranslationService', 'isAuthenticated',
+    function($scope, $state, $stateParams, ParseQueryAngular, $rootScope, DishesService, RestaurantService, TranslationService, isAuthenticated) {
         if (!isAuthenticated()) { return; }
         
         $scope.updateData = function(foundDishes) {
@@ -328,14 +333,12 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
             });
         };
 
-        $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
-
         $scope.dishes = [];
         $scope.gridOptions = {
             data: 'dishes',
             columnDefs: [
                 {field: 'name', displayName: 'Name'},
-                {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteDish(row)">Delete</button></div>'}
+                {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteDish(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
             ],
             enableCellSelection: false,
             enableRowSelection: false
@@ -356,6 +359,28 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
             });
             
         };
+        
+        $scope.create = function() {
+            $rootScope.progessAction = 'Preparing...';
+            $rootScope.progress = 0;
+            $('#save-modal').modal('show');
+        };
+        
+        $('#save-modal').on('shown.bs.modal', function(e) {
+            if (!$scope.dish) { return ;}
+            
+            $rootScope.progessAction = 'Getting translations of ' + $rootScope.currentRestaurant.getName();
+            $rootScope.progress = 0;
+            var translationService = new TranslationService.collection();
+            translationService.loadTranslationsOfRestaurant($rootScope.currentRestaurant).then(function(foundTranslations) {
+                var steps = 1 + _.size(foundTranslations.models);
+                var currentStep = 1;
+                $rootScope.progress = (currentStep * 100) / steps;
+                $scope.foundDishes.addDish($scope.dish.name, $rootScope.currentRestaurant, foundTranslations, $rootScope, "#save-modal", currentStep, steps).then(function() {
+                    $scope.updateData($scope.foundDishes);
+                });
+                
+            });            
+        });
     }
-
 ]);

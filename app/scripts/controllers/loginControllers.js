@@ -42,4 +42,5 @@ loginControllers.factory('isAuthenticated', ['ParseQueryAngular', '$state', '$ro
         return true;
       }
     };
-  }]);
+  }
+]);

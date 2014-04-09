@@ -1,0 +1,22 @@
+<div class="page-header">
+  <h1>Categories of {{ currentRestaurant.getName() }}</h1>
+</div>
+<div class="row">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">New Category</h3>
+    </div>
+    <div class="panel-body">
+        <form class="form-inline" role="form">
+            <div class="form-group">
+                <label class="sr-only" for="restaurantName">Name:</label>
+                <input type="text" id="name" ng-model="category.name" placeholder="Category name">
+            </div>
+            <button type="submit" class="btn btn-primary" ng-click="create(category)">Create</button>
+        </form>
+    </div>
+</div>
+</div>
+<div class="row">
+  <div class="gridStyle" ng-grid="gridOptions"></div>
+</div>

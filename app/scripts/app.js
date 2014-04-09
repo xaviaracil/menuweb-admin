@@ -58,6 +58,15 @@ angular.module('menuwebAdminApp', [
         }
       }
     })
+    .state('dashboard.restaurants.categories', {
+      url: '/:restaurantId/categories',
+      views: {
+        '@dashboard': {
+          templateUrl: 'views/categories-list.html',
+          controller: 'AdminCategoriesListCtrl'
+        }
+      }
+    })
     .state('dashboard.restaurants.new', {
       url: '/new',
       views: {

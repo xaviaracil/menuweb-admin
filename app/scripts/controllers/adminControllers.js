@@ -116,7 +116,7 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', '$r
         {field: 'name', displayName: 'Name'},
         {field: 'normalizedName', displayName:'normalizedName'},
         {field: 'completed', displayName:'Translated'},
-        {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-info" ng-click="goToDishes(row)">Dishes</button>&nbsp;<button type="button" class="btn btn-xs btn-danger" ng-click="deleteRestaurant(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
+        {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-info" ng-click="goToCategories(row)">Categories</button>&nbsp;<button type="button" class="btn btn-xs btn-info" ng-click="goToDishes(row)">Dishes</button>&nbsp;<button type="button" class="btn btn-xs btn-danger" ng-click="deleteRestaurant(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
       ],
       showColumnMenu: true,
       afterSelectionChange: $scope.onRowSelected,
@@ -153,6 +153,12 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', '$r
       $state.go('.dishes', {restaurantId: row.getProperty('id')});
       return false;
     };
+    
+    $scope.goToCategories = function(row) {
+      $rootScope.currentRestaurant = row.getProperty('model');
+      $state.go('.categories', {restaurantId: row.getProperty('id')});
+      return false;
+    }
   }
 ]);
 
@@ -372,6 +378,72 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
         $rootScope.progress = (currentStep * 100) / steps;
         $scope.foundDishes.addDish($scope.dish.name, $rootScope.currentRestaurant, foundTranslations, $rootScope, '#save-modal', currentStep, steps).then(function() {
           $scope.updateData($scope.foundDishes);
+        });
+      });
+    });
+  }
+]);
+
+adminControllers.controller('AdminCategoriesListCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', '$rootScope', 'CategoriesService', 'RestaurantService', 'TranslationService', 'isAuthenticated',
+  function($scope, $state, $stateParams, ParseQueryAngular, $rootScope, CategoriesService, RestaurantService, TranslationService, isAuthenticated) {
+    'use strict';
+    if (!isAuthenticated()) { return; }
+
+    $scope.updateData = function(foundCategories) {
+      $scope.foundCategories = foundCategories;
+      $scope.categories = _.map(foundCategories.models, function(category) {
+        return {
+          id: category.id,
+          name: category.getName(),
+          model: category
+        };
+      });
+    };
+
+    $scope.categories = [];
+    $scope.gridOptions = {
+      data: 'categories',
+      columnDefs: [
+        {field: 'name', displayName: 'Name'},
+        {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteCategory(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
+      ],
+      enableCellSelection: false,
+      enableRowSelection: false
+    };
+
+    // get the collection from our data definitions
+    var categories = new CategoriesService.collection();
+    var restaurant = new RestaurantService.model();
+    restaurant.id = $stateParams.restaurantId;
+
+    categories.loadCategoriesOfRestaurant(restaurant).then(function(foundCategories) {
+      $scope.updateData(foundCategories);
+    });
+
+    $scope.deleteCategory = function(row) {
+      categories.removeCategory(row.getProperty('model')).then(function() {
+        $scope.updateData($scope.foundCategories);
+      });
+    };
+
+    $scope.create = function() {
+      $rootScope.progessAction = 'Preparing...';
+      $rootScope.progress = 0;
+      $('#save-modal').modal('show');
+    };
+
+    $('#save-modal').on('shown.bs.modal', function() {
+      if (!$scope.category) { return ;}
+
+      $rootScope.progessAction = 'Getting translations of ' + $rootScope.currentRestaurant.getName();
+      $rootScope.progress = 0;
+      var translationService = new TranslationService.collection();
+      translationService.loadTranslationsOfRestaurant($rootScope.currentRestaurant).then(function(foundTranslations) {
+        var steps = 1 + _.size(foundTranslations.models);
+        var currentStep = 1;
+        $rootScope.progress = (currentStep * 100) / steps;
+        $scope.foundCategories.addCategory($scope.category.name, $rootScope.currentRestaurant, foundTranslations, $rootScope, '#save-modal', currentStep, steps).then(function() {
+          $scope.updateData($scope.foundCategories);
         });
       });
     });

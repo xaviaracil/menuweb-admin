@@ -1,6 +1,11 @@
 <div class="page-header">
   <h1>Dishes of {{ currentRestaurant.getName() }}</h1>
 </div>
+<ol class="breadcrumb">
+  <li><a ui-sref="dashboard.restaurants">Home</a></li>
+  <li><a ui-sref="^">Restaurants</a></li>
+  <li class="active">{{ currentRestaurant.getName() }}</li>
+</ol>  
 <div class="row">
 <div class="panel panel-default">
     <div class="panel-heading">

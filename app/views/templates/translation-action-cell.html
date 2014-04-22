@@ -1,4 +1,5 @@
 <div class="ngCellText">
+    <button type="button" class="btn btn-xs btn-info" ng-click="goToCategories(row)">Categories</button>&nbsp;<button type="button" class="btn btn-xs btn-info" ng-click="goToDishes(row)">Dishes</button>&nbsp;
     <button type="button" class="btn btn-xs btn-success" ng-click="markAsCompleted(row)" ng-show="!row.getProperty('completed')"><span class="glyphicon glyphicon-ok-sign"></span> Mark as completed</button>
     <button type="button" class="btn btn-xs btn-warning" ng-click="markAsPending(row)" ng-show="row.getProperty('completed')"><span class="glyphicon glyphicon-question-sign"></span> Mark as pending</button>
     &nbsp;

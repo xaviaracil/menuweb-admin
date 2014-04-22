@@ -89,6 +89,15 @@ angular.module('menuwebAdminApp', [
           controller: 'AdminTranslationCtrl'
         }
       }
+    })
+    .state('dashboard.translations.translation.categories', {
+      url: '/categories',
+      views: {
+        '@dashboard': {
+          templateUrl: 'views/translation-categories.html',
+          controller: 'AdminTranslationCategoriesCtrl'
+        }
+      }
     });
 
     // if none of the above states are matched, use this as the fallback

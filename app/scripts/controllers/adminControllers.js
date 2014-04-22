@@ -6,10 +6,17 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
     'use strict';
     if (!isAuthenticated()) { return; }
 
-    $scope.goToTranslation = function(row) {
+    $scope.goToDishes = function(row) {
       $rootScope.currentTranslation = row.getProperty('model');
       $rootScope.currentRestaurant = row.getProperty('restaurant');
       $state.go('.translation', {translationId: row.getProperty('id')});
+      return false;
+    };
+
+    $scope.goToCategories = function(row) {
+      $rootScope.currentTranslation = row.getProperty('model');
+      $rootScope.currentRestaurant = row.getProperty('restaurant');
+      $state.go('.translation.categories', {translationId: row.getProperty('id')});
       return false;
     };
 
@@ -22,7 +29,7 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
           completed: translation.getCompleted(),
           name: translation.getRestaurant() ? translation.getRestaurant().getName() : 'No restaurant',
           model: translation,
-          restaurant: translation.getRestaurant
+          restaurant: translation.getRestaurant()
         };
       });
     };
@@ -54,7 +61,7 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
     $scope.gridOptions = {
       data: 'translations',
       columnDefs: [
-        {field: 'name', displayName: 'Name', cellTemplate: '<div class="ngCellText" ng-click="goToTranslation(row)">{{row.getProperty(col.field)}}</div>'},
+        {field: 'name', displayName: 'Name'},
         {field: 'language', displayName:'Language'},
         {field: 'completed', displayName:'Completed?'},
         {displayName: 'Actions', cellTemplate: 'views/templates/translation-action-cell.html'}
@@ -202,6 +209,53 @@ adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$state
 
     $scope.$on('ngGridEventEndCellEdit', function() {
       var gridSelection = $scope.currentDish[0];
+      if (gridSelection.translation !== gridSelection.model.getName()) {
+        gridSelection.model.setName(gridSelection.translation);
+        gridSelection.model.saveParse(); // TODO check for result and display an alert if not saved
+      }
+    });
+  }
+]);
+
+adminControllers.controller('AdminTranslationCategoriesCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', 'TranslatedCategoriesService', 'isAuthenticated',
+  function($scope, $state, $stateParams, ParseQueryAngular, RestaurantService, TranslationService, TranslatedCategoriesService, isAuthenticated) {
+    'use strict';
+    if (!isAuthenticated()) { return; }
+
+    $scope.categories = [];
+    $scope.currentCategory = [];
+    $scope.gridOptions = {
+      data: 'categories',
+      enableCellSelection: true,
+      enableCellEditOnFocus: true,
+      multiSelect: false,
+      selectedItems: $scope.currentCategory,
+      columnDefs: [
+        {field: 'name', displayName: 'Name', enableCellEdit: false},
+        {field: 'translation', displayName:'Translation', enableCellEdit: true},
+      ],
+      showColumnMenu: true
+    };
+
+    // get the collection from our data definitions
+    var categories = new TranslatedCategoriesService.collection();
+    var translation = new TranslationService.model();
+    translation.id = $stateParams.translationId;
+
+    categories.loadCategoriesOfTranslation(translation).then(function(foundCategories) {
+      $scope.categories = _.map(foundCategories.models, function(category) {
+        return {
+          id: category.id,
+          name: category.getCategory().get('name'),
+          translation: category.getName(),
+          model: category
+        };
+      });
+    });
+
+    $scope.$on('ngGridEventEndCellEdit', function() {
+      var gridSelection = $scope.currentCategory[0];
+      console.log(gridSelection);
       if (gridSelection.translation !== gridSelection.model.getName()) {
         gridSelection.model.setName(gridSelection.translation);
         gridSelection.model.saveParse(); // TODO check for result and display an alert if not saved

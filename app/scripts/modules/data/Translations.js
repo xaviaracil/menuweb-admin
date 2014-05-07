@@ -83,6 +83,12 @@ angular.module('ExternalDataServices')
 					});
 				});
 				_this.add(data);
+			}, function(error) {
+				$rootScope.progessAction = error.message;
+				$rootScope.currentError = error.message;
+    			if (modal) {
+                    $(modal).modal('hide');
+    			}
 			});
 		},
 		removeTranslation:function(translation) {

@@ -372,8 +372,8 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
   }
 ]);
 
-adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', '$rootScope', 'DishesService', 'RestaurantService', 'TranslationService', 'isAuthenticated',
-  function($scope, $state, $stateParams, ParseQueryAngular, $rootScope, DishesService, RestaurantService, TranslationService, isAuthenticated) {
+adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', '$rootScope', 'DishesService', 'RestaurantService', 'TranslationService', 'CategoriesService', 'isAuthenticated',
+  function($scope, $state, $stateParams, ParseQueryAngular, $rootScope, DishesService, RestaurantService, TranslationService, CategoriesService, isAuthenticated) {
     'use strict';
     if (!isAuthenticated()) { return; }
 
@@ -383,6 +383,7 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
         return {
           id: dish.id,
           name: dish.getName(),
+          category: dish.get('category') ? dish.get('category').get('name') : 'Uncategorized',
           model: dish
         };
       });
@@ -393,6 +394,7 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
       data: 'dishes',
       columnDefs: [
         {field: 'name', displayName: 'Name'},
+        {field: 'category', displayName: 'Category'},
         {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteDish(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
       ],
       enableCellSelection: false,
@@ -401,6 +403,7 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
 
     // get the collection from our data definitions
     var dishes = new DishesService.collection();
+    var categories = new CategoriesService.collection();
     var restaurant = new RestaurantService.model();
     restaurant.id = $stateParams.restaurantId;
 
@@ -408,6 +411,16 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
       $scope.updateData(foundDishes);
     });
 
+    categories.loadCategoriesOfRestaurant(restaurant).then(function(foundCategories) {
+       $scope.categories =  _.map(foundCategories.models, function(category) {
+           return {
+               id: category.id,
+               name: category.getName(),
+               model: category
+           }
+       });
+    });
+    
     $scope.deleteDish = function(row) {
       dishes.removeDish(row.getProperty('model')).then(function() {
         $scope.updateData($scope.foundDishes);
@@ -422,15 +435,20 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
 
     $('#save-modal').on('shown.bs.modal', function() {
       if (!$scope.dish) { return ;}
-
+      console.log($scope.dish);
+      var category = null;
+      if ($scope.dish.category) {
+          category = new CategoriesService.model();
+          category.id = $scope.dish.category;
+      }
       $rootScope.progessAction = 'Getting translations of ' + $rootScope.currentRestaurant.getName();
       $rootScope.progress = 0;
       var translationService = new TranslationService.collection();
       translationService.loadTranslationsOfRestaurant($rootScope.currentRestaurant).then(function(foundTranslations) {
         var steps = 1 + _.size(foundTranslations.models);
         var currentStep = 1;
-        $rootScope.progress = (currentStep * 100) / steps;
-        $scope.foundDishes.addDish($scope.dish.name, $rootScope.currentRestaurant, foundTranslations, $rootScope, '#save-modal', currentStep, steps).then(function() {
+        $rootScope.progress = (currentStep * 100) / steps;        
+        $scope.foundDishes.addDish($scope.dish.name, $rootScope.currentRestaurant, category, foundTranslations, $rootScope, '#save-modal', currentStep, steps).then(function() {
           $scope.updateData($scope.foundDishes);
         });
       });

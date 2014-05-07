@@ -21,6 +21,13 @@ angular.module('ExternalDataServices')
 		getRestaurant: function() {
 			return this.get('restaurant');
 		},
+		setCategory: function(category) {
+    		this.set('category', category);
+    		return this;
+		},
+		getCategory: function() {
+    		return this.get('category');
+		},
 		destroyParse:function(){
 			return ParseQueryAngular(this,{functionToCall:'destroy'}); // jshint ignore:line
 		}
@@ -31,13 +38,14 @@ angular.module('ExternalDataServices')
 		comparator: function(model) {
 			return -model.createdAt.getTime();
 		},
-		addDish: function(name, restaurant, translations, $rootScope, modal, currentStep, steps) {
+		addDish: function(name, restaurant, category, translations, $rootScope, modal, currentStep, steps) {
 			// save request_id to Parse
 			var _this = this;
 
 			var dish = new Dish();
 			dish.setName(name);
 			dish.setRestaurant(restaurant);
+            dish.setCategory(category);
 
 			// use the extended Parse SDK to perform a save and return the promised object back into the Angular world
 			$rootScope.progessAction = 'Creating dish ' + name;
@@ -75,6 +83,7 @@ angular.module('ExternalDataServices')
 			this.query = (new Parse.Query(Dish));
 			this.query.equalTo('restaurant', restaurant);
 			this.query.ascending('name');
+			this.query.include('category');
 			// use the enhanced load() function to fetch the collection
 			return this.load();
 		},

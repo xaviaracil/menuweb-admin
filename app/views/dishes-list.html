@@ -17,6 +17,12 @@
                 <label class="sr-only" for="restaurantName">Name:</label>
                 <input type="text" id="name" ng-model="dish.name" placeholder="Dish name">
             </div>
+            <div class="form-group">
+                <label for="category" class="sr-only">Category:</label>
+                <div class="col-sm-10">
+                    <select class="form-control" id="category" ng-model="dish.category" ng-options="c.id as c.name for c in categories"></select>
+                </div>
+            </div>
             <button type="submit" class="btn btn-primary" ng-click="create(dish)">Create</button>
         </form>
     </div>

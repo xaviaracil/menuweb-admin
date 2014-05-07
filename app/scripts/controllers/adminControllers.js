@@ -165,7 +165,7 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', '$r
       $rootScope.currentRestaurant = row.getProperty('model');
       $state.go('.categories', {restaurantId: row.getProperty('id')});
       return false;
-    }
+    };
   }
 ]);
 

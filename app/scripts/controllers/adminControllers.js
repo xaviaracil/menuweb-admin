@@ -412,13 +412,13 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
     });
 
     categories.loadCategoriesOfRestaurant(restaurant).then(function(foundCategories) {
-       $scope.categories =  _.map(foundCategories.models, function(category) {
-           return {
-               id: category.id,
-               name: category.getName(),
-               model: category
-           }
-       });
+      $scope.categories =  _.map(foundCategories.models, function(category) {
+        return {
+          id: category.id,
+          name: category.getName(),
+          model: category
+        };
+      });
     });
     
     $scope.deleteDish = function(row) {
@@ -438,8 +438,8 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
       console.log($scope.dish);
       var category = null;
       if ($scope.dish.category) {
-          category = new CategoriesService.model();
-          category.id = $scope.dish.category;
+        category = new CategoriesService.model();
+        category.id = $scope.dish.category;
       }
       $rootScope.progessAction = 'Getting translations of ' + $rootScope.currentRestaurant.getName();
       $rootScope.progress = 0;
@@ -447,7 +447,7 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
       translationService.loadTranslationsOfRestaurant($rootScope.currentRestaurant).then(function(foundTranslations) {
         var steps = 1 + _.size(foundTranslations.models);
         var currentStep = 1;
-        $rootScope.progress = (currentStep * 100) / steps;        
+        $rootScope.progress = (currentStep * 100) / steps;
         $scope.foundDishes.addDish($scope.dish.name, $rootScope.currentRestaurant, category, foundTranslations, $rootScope, '#save-modal', currentStep, steps).then(function() {
           $scope.updateData($scope.foundDishes);
         });

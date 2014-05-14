@@ -23,6 +23,30 @@ angular.module('ExternalDataServices')
 		getLocation: function() {
 			return this.get('location');
 		},
+		setAddress: function(address) {
+    		this.set('address', address);
+		},
+		getAddress: function() {
+    		return this.get('address');
+		},
+		setPostalCode: function(postalCode) {
+    		this.set('postalCode', postalCode);
+		},
+		getPostalCode: function() {
+    		return this.get('postalCode');
+		},
+		setCity: function(city) {
+    		this.set('city', city);
+		},
+		getCity: function() {
+    		return this.get('city');
+		},
+		setState: function(state) {
+    		this.set('state', state);
+		},
+		getState: function() {
+    		return this.get('state');
+		},
 		setInitialLanguage: function(initialLanguage) {
 			this.set('initialLanguage', initialLanguage);
 			return this;

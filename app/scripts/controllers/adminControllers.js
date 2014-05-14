@@ -1,4 +1,4 @@
-/* global _,$ */
+/* global _,$,Parse */
 var adminControllers = angular.module('menuweb.admin.controllers', []);
 
 adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', '$rootScope', 'DishesService', 'TranslatedDishesService', 'isAuthenticated',
@@ -160,7 +160,7 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', '$r
       $state.go('.dishes', {restaurantId: row.getProperty('id')});
       return false;
     };
-    
+
     $scope.goToCategories = function(row) {
       $rootScope.currentRestaurant = row.getProperty('model');
       $state.go('.categories', {restaurantId: row.getProperty('id')});
@@ -287,6 +287,37 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
       return {name: 'Put dish name here', edited:false};
     });
 
+    $scope.map = {
+      center: {
+        latitude: 41.39,
+        longitude: 2.17
+      },
+      zoom: 13,
+      clickedMarker: {
+        title: 'Restaurant position',
+        latitude: null,
+        longitude: null
+      },
+      events: {
+        click: function(mapModel, eventName, originalEventArgs) {
+          var e = originalEventArgs[0];
+
+          if (!$scope.map.clickedMarker) {
+            $scope.map.clickedMarker = {
+              title: 'You clicked here',
+              latitude: e.latLng.lat(),
+              longitude: e.latLng.lng()
+            };
+          } else {
+            $scope.map.clickedMarker.latitude = e.latLng.lat();
+            $scope.map.clickedMarker.longitude = e.latLng.lng();
+          }
+
+          $scope.$apply();
+        }
+      }
+    };
+
     $scope.gridOptions = {
       data: 'dishes',
       enableCellSelection: true,
@@ -311,7 +342,16 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
     });
 
     $('#save-modal').on('shown.bs.modal', function() {
-      if (!$scope.restaurant) { return ;}
+      if (!$scope.restaurant) {
+        $rootScope.progessAction = 'Data Required';
+        $scope.currentError = 'Data Required';
+        return;
+      }
+      if (!$scope.map.clickedMarker || !$scope.map.clickedMarker.latitude) {
+        $rootScope.progessAction = 'Location Required';
+        $scope.currentError = 'Location Required';
+        return;
+      }
       $rootScope.progessAction = 'Creating restaurant ' + $scope.restaurant.name;
       var steps = 1 + 1 + _.size(_.filter($scope.dishes, function(dish) {return dish.edited && dish.name && dish.name !== ''; }));
       var currentStep = 1;
@@ -320,6 +360,14 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
       var newRestaurant = new RestaurantService.model();
       newRestaurant.setName($scope.restaurant.name);
       newRestaurant.setInitialLanguage($scope.restaurant.language);
+      newRestaurant.setAddress($scope.restaurant.address);
+      newRestaurant.setPostalCode($scope.restaurant.postalCode);
+      newRestaurant.setCity($scope.restaurant.city);
+      newRestaurant.setState($scope.restaurant.state);
+      newRestaurant.setLocation(new Parse.GeoPoint({
+        latitude: $scope.map.clickedMarker.latitude,
+        longitude: $scope.map.clickedMarker.longitude
+      }));
       newRestaurant.saveParse().then(function(savedRestaurant){
         $rootScope.progress = (++currentStep * 100) / steps;
         $rootScope.progessAction = 'Creating translation ' + $scope.restaurant.language;
@@ -420,7 +468,7 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
         };
       });
     });
-    
+
     $scope.deleteDish = function(row) {
       dishes.removeDish(row.getProperty('model')).then(function() {
         $scope.updateData($scope.foundDishes);

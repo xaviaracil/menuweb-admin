@@ -1,14 +1,14 @@
 <div class="page-header">
   <h1>New Restaurant</h1>
 </div>
-<form class="form-horizontal" role="form"> 
-    <div class="form-group">
+<form name="newRestaurantForm" class="form-horizontal" role="form"> 
+    <div class="form-group has-feedback" ng-class="{'has-error': newRestaurantForm.name.$error.required, 'has-success': !newRestaurantForm.name.$error.required}">
         <label for="name" class="col-sm-2 control-label">Name</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="name" placeholder="Enter Name" ng-model="restaurant.name">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" ng-model="restaurant.name" required>
         </div>
     </div>
-    <div class="form-group">        
+    <div class="form-group has-feedback" ng-class="{'has-error': !map.clickedMarker.latitude, 'has-success': map.clickedMarker.latitude}">        
         <label class="col-sm-2 control-label">Location</label>
         <div class="col-sm-10">
             <google-map center='map.center' zoom='map.zoom' draggable="true" options='{streetViewControl:false}' events="map.events">
@@ -17,34 +17,34 @@
             </google-map>
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group has-feedback" ng-class="{'has-error': newRestaurantForm.address.$error.required, 'has-success': !newRestaurantForm.address.$error.required}">
         <label for="address" class="col-sm-2 control-label">Address</label>
         <div class="col-sm-10">
-            <textarea class="form-control" rows="3" id="address" placeholder="Enter Address" ng-model="restaurant.address"></textarea>
+            <textarea class="form-control" rows="3" id="address" name="address" placeholder="Enter Address" ng-model="restaurant.address" required=""></textarea>
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group has-feedback" ng-class="{'has-error': newRestaurantForm.postalCode.$error.required, 'has-success': !newRestaurantForm.postalCode.$error.required}">
         <label for="postalCode" class="col-sm-2 control-label">Postal Code</label>
         <div class="col-sm-10">            
-            <input type="text" class="form-control" id="postalCode" placeholder="Enter Postal Code" ng-model="restaurant.postalCode">
+            <input type="text" class="form-control" id="postalCode" name="postalCode" placeholder="Enter Postal Code" ng-model="restaurant.postalCode" required="">
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group has-feedback" ng-class="{'has-error': newRestaurantForm.city.$error.required, 'has-success': !newRestaurantForm.city.$error.required}">
         <label for="city" class="col-sm-2 control-label">City</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="city" placeholder="Enter City" ng-model="restaurant.city">
+            <input type="text" class="form-control" id="city" name="city" placeholder="Enter City" ng-model="restaurant.city" required="">
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group has-feedback" ng-class="{'has-error': newRestaurantForm.state.$error.required, 'has-success': !newRestaurantForm.state.$error.required}">
         <label for="state" class="col-sm-2 control-label">Province</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="state" placeholder="Enter Province" ng-model="restaurant.state">
+            <input type="text" class="form-control" id="state" name="state" placeholder="Enter Province" ng-model="restaurant.state" required>
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group has-feedback" ng-class="{'has-error': newRestaurantForm.language.$error.required, 'has-success': !newRestaurantForm.language.$error.required}">
         <label for="language" class="col-sm-2 control-label">Initial Language</label>
         <div class="col-sm-10">
-            <select class="form-control" id="language" ng-model="restaurant.language" ng-options="l.id as l.name for l in languages"></select>
+            <select class="form-control" id="language" name="language" ng-model="restaurant.language" ng-options="l.id as l.name for l in languages" required></select>
         </div>
     </div>
     <div class="form-group">

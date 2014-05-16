@@ -123,7 +123,7 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', '$r
         {field: 'name', displayName: 'Name'},
         {field: 'normalizedName', displayName:'normalizedName'},
         {field: 'completed', displayName:'Translated', width:'10%'},
-        {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-info" ng-click="goToCategories(row)">Categories</button>&nbsp;<button type="button" class="btn btn-xs btn-info" ng-click="goToDishes(row)">Dishes</button>&nbsp;<button type="button" class="btn btn-xs btn-danger" ng-click="deleteRestaurant(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
+        {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-info" ng-click="goToCategories(row)">Categories</button>&nbsp;<button type="button" class="btn btn-xs btn-info" ng-click="goToDishesCategories(row)">Dishes Categories</button>&nbsp;<button type="button" class="btn btn-xs btn-info" ng-click="goToDishes(row)">Dishes</button>&nbsp;<button type="button" class="btn btn-xs btn-danger" ng-click="deleteRestaurant(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
       ],
       showColumnMenu: true,
       afterSelectionChange: $scope.onRowSelected,
@@ -161,9 +161,14 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', '$r
       return false;
     };
 
-    $scope.goToCategories = function(row) {
+    $scope.goToDishesCategories = function(row) {
       $rootScope.currentRestaurant = row.getProperty('model');
       $state.go('.categories', {restaurantId: row.getProperty('id')});
+      return false;
+    };
+    $scope.goToCategories = function(row) {
+      $rootScope.currentRestaurant = row.getProperty('model');
+      $state.go('.general', {restaurantId: row.getProperty('id')});
       return false;
     };
   }
@@ -570,6 +575,56 @@ adminControllers.controller('AdminRestaurantCategoriesListCtrl', ['$scope', '$st
   }
 ]);
 
+adminControllers.controller('AdminRestaurantGeneralCategoriesListCtrl', ['$scope', '$rootScope', 'ParseQueryAngular', 'CategoriesService', 'RestaurantService', 'isAuthenticated',
+  function($scope, $rootScope, ParseQueryAngular, CategoriesService, RestaurantService, isAuthenticated) {
+    'use strict';
+    if (!isAuthenticated()) { return; }
+
+    $scope.updateData = function(restaurant) {
+      $scope.categories = _.map(restaurant.get('generalCategories'), function(category) {
+        return {
+          id: category.id,
+          name: categories.get(category) ? categories.get(category).get('name') : 'Undefined',
+          model: category
+        };
+      });
+    };
+
+    $scope.categories = [];
+    $scope.gridOptions = {
+      data: 'categories',
+      columnDefs: [
+        {field: 'name', displayName: 'Name'},
+        {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteCategory(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
+      ],
+      enableCellSelection: false,
+      enableRowSelection: false
+    };
+
+    // get the collection from our data definitions
+    var categories = new CategoriesService.collection();
+    categories.loadGeneralCategories().then(function(foundCategories) {
+      $scope.generalCategories = foundCategories.models;
+      $scope.updateData($rootScope.currentRestaurant);
+    });
+
+    $scope.deleteCategory = function(row) {
+      $rootScope.currentRestaurant.remove('generalCategories', row.getProperty('model'));
+      $rootScope.currentRestaurant.saveParse().then(function() {
+        $scope.updateData($rootScope.currentRestaurant);
+      });
+    };
+
+    $scope.create = function() {
+      if (!$scope.category) { return ;}
+      $rootScope.currentRestaurant.addUnique('generalCategories', categories.get($scope.category.id));
+      $rootScope.currentRestaurant.saveParse().then(function() {
+        $scope.updateData($rootScope.currentRestaurant);
+      });
+    };
+  }
+]);
+
 adminControllers.controller('AdminCategoriesListCtrl', ['$scope','$state', '$rootScope', 'ParseQueryAngular', 'CategoriesService', 'isAuthenticated',
   function($scope, $state, $rootScope, ParseQueryAngular, CategoriesService, isAuthenticated) {
     'use strict';
@@ -611,10 +666,11 @@ adminControllers.controller('AdminCategoriesListCtrl', ['$scope','$state', '$roo
 
     $scope.goToTranslations = function(row) {
       $rootScope.currentCategory = row.getProperty('model');
+      console.log($rootScope.currentCategory);
       $state.go('.translations', {categoryId: row.getProperty('id')});
       return false;
     };
-    
+
     $scope.create = function() {
       if (!$scope.category) { return ;}
 
@@ -664,7 +720,7 @@ adminControllers.controller('AdminCategoryTranslationListCtrl', ['$scope', '$sta
         gridSelection.model.saveParse(); // TODO check for result and display an alert if not saved
       }
     });
-    
+
     $scope.updateData = function(foundCategories) {
       $scope.foundCategories = foundCategories;
       $scope.categories = _.map(foundCategories.models, function(category) {
@@ -683,7 +739,7 @@ adminControllers.controller('AdminCategoryTranslationListCtrl', ['$scope', '$sta
       $scope.foundCategories.addGeneralCategory(category, $scope.translation.language, $scope.translation.name).then(function() {
         $scope.updateData($scope.foundCategories);
       });
-        
+
     };
 
     $scope.deleteCategory = function(row) {

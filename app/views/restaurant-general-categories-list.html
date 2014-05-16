@@ -1,0 +1,27 @@
+<div class="page-header">
+  <h1>Categories of {{ currentRestaurant.getName() }}</h1>
+</div>
+<ol class="breadcrumb">
+  <li><a ui-sref="dashboard.restaurants">Home</a></li>
+  <li><a ui-sref="^">Restaurants</a></li>
+  <li class="active">{{ currentRestaurant.getName() }}</li>
+</ol>  
+<div class="row">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Add Category</h3>
+    </div>
+    <div class="panel-body">
+        <form class="form-inline" role="form">
+            <div class="form-group">
+                <label class="sr-only" for="name">Name:</label>
+                <select class="form-control" id="name" name="name" ng-model="category.id" ng-options="c.id as c.getName() for c in generalCategories" required></select>
+            </div>
+            <button type="submit" class="btn btn-primary" ng-click="create(category)">Create</button>
+        </form>
+    </div>
+</div>
+</div>
+<div class="row">
+  <div class="gridStyle" ng-grid="gridOptions"></div>
+</div>

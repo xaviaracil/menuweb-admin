@@ -25,6 +25,13 @@ angular.module('ExternalDataServices')
 		getCategory: function() {
 			return this.get('category');
 		},
+		setLanguage: function(language) {
+			this.set('language', language);
+			return this;
+		},
+		getLanguage: function() {
+			return this.get('language');
+		},
 		destroyParse:function(){
 			return ParseQueryAngular(this,{functionToCall:'destroy'}); // jshint ignore:line
 		}
@@ -43,6 +50,13 @@ angular.module('ExternalDataServices')
 			// use the enhanced load() function to fetch the collection
 			return this.load();
 		},
+		loadTranslationsOfCategory: function(category) {
+			this.query = new Parse.Query(TranslatedCategory);
+			this.query.include('translation');
+			this.query.equalTo('category', category);
+			// use the enhanced load() function to fetch the collection
+			return this.load();
+		},
 		addCategory: function(name, translation) {
 			// save request_id to Parse
 			var _this = this;
@@ -56,6 +70,21 @@ angular.module('ExternalDataServices')
 				_this.add(data);
 			});
 		},
+        addGeneralCategory: function(category, language, name) {
+			// save request_id to Parse
+			var _this = this;
+
+			var translatedCategory = new TranslatedCategory();
+			translatedCategory.setCategory(category);
+			translatedCategory.setName(name);			
+			translatedCategory.setLanguage(language);
+
+			// use the extended Parse SDK to perform a save and return the promised object back into the Angular world
+			return translatedCategory.saveParse().then(function(data){
+				_this.add(data);
+			});
+            
+        },
 		removeCategory:function(translatedCategory) {
 			if (!this.get(translatedCategory)) { return false; }
 			var _this = this;

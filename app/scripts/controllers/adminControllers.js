@@ -62,8 +62,8 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
       data: 'translations',
       columnDefs: [
         {field: 'name', displayName: 'Name'},
-        {field: 'language', displayName:'Language'},
-        {field: 'completed', displayName:'Completed?'},
+        {field: 'language', displayName:'Language', width:'10%'},
+        {field: 'completed', displayName:'Completed?', width:'10%'},
         {displayName: 'Actions', cellTemplate: 'views/templates/translation-action-cell.html'}
       ],
       showColumnMenu: true,
@@ -122,7 +122,7 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', '$r
       columnDefs: [
         {field: 'name', displayName: 'Name'},
         {field: 'normalizedName', displayName:'normalizedName'},
-        {field: 'completed', displayName:'Translated'},
+        {field: 'completed', displayName:'Translated', width:'10%'},
         {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-info" ng-click="goToCategories(row)">Categories</button>&nbsp;<button type="button" class="btn btn-xs btn-info" ng-click="goToDishes(row)">Dishes</button>&nbsp;<button type="button" class="btn btn-xs btn-danger" ng-click="deleteRestaurant(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
       ],
       showColumnMenu: true,
@@ -443,7 +443,7 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
       columnDefs: [
         {field: 'name', displayName: 'Name'},
         {field: 'category', displayName: 'Category'},
-        {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteDish(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
+        {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteDish(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>', width:'10%'}
       ],
       enableCellSelection: false,
       enableRowSelection: false
@@ -504,7 +504,7 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
   }
 ]);
 
-adminControllers.controller('AdminCategoriesListCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', '$rootScope', 'CategoriesService', 'RestaurantService', 'TranslationService', 'isAuthenticated',
+adminControllers.controller('AdminRestaurantCategoriesListCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', '$rootScope', 'CategoriesService', 'RestaurantService', 'TranslationService', 'isAuthenticated',
   function($scope, $state, $stateParams, ParseQueryAngular, $rootScope, CategoriesService, RestaurantService, TranslationService, isAuthenticated) {
     'use strict';
     if (!isAuthenticated()) { return; }
@@ -567,5 +567,129 @@ adminControllers.controller('AdminCategoriesListCtrl', ['$scope', '$state', '$st
         });
       });
     });
+  }
+]);
+
+adminControllers.controller('AdminCategoriesListCtrl', ['$scope','$state', '$rootScope', 'ParseQueryAngular', 'CategoriesService', 'isAuthenticated',
+  function($scope, $state, $rootScope, ParseQueryAngular, CategoriesService, isAuthenticated) {
+    'use strict';
+    if (!isAuthenticated()) { return; }
+
+    $scope.updateData = function(foundCategories) {
+      $scope.foundCategories = foundCategories;
+      $scope.categories = _.map(foundCategories.models, function(category) {
+        return {
+          id: category.id,
+          name: category.getName(),
+          model: category
+        };
+      });
+    };
+
+    $scope.gridOptions = {
+      data: 'categories',
+      columnDefs: [
+        {field: 'name', displayName: 'Name'},
+        {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-info" ng-click="goToTranslations(row)">Translations</button>&nbsp;<button type="button" class="btn btn-xs btn-danger" ng-click="deleteCategory(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
+      ],
+      enableCellSelection: false,
+      enableRowSelection: false
+    };
+
+    // get the collection from our data definitions
+    var categories = new CategoriesService.collection();
+
+    categories.loadGeneralCategories().then(function(foundCategories) {
+      $scope.updateData(foundCategories);
+    });
+
+    $scope.deleteCategory = function(row) {
+      categories.removeCategory(row.getProperty('model')).then(function() {
+        $scope.updateData($scope.foundCategories);
+      });
+    };
+
+    $scope.goToTranslations = function(row) {
+      $rootScope.currentCategory = row.getProperty('model');
+      $state.go('.translations', {categoryId: row.getProperty('id')});
+      return false;
+    };
+    
+    $scope.create = function() {
+      if (!$scope.category) { return ;}
+
+      $scope.foundCategories.addGeneralCategory($scope.category.name).then(function() {
+        $scope.updateData($scope.foundCategories);
+      });
+    };
+  }
+]);
+
+adminControllers.controller('AdminCategoryTranslationListCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'CategoriesService', 'TranslatedCategoriesService', 'isAuthenticated',
+  function($scope, $state, $stateParams, ParseQueryAngular, CategoriesService, TranslatedCategoriesService, isAuthenticated) {
+    'use strict';
+    if (!isAuthenticated()) { return; }
+
+    $scope.categories = [];
+    $scope.currentCategory = [];
+    $scope.gridOptions = {
+      data: 'categories',
+      enableCellSelection: true,
+      enableCellEditOnFocus: true,
+      multiSelect: false,
+      selectedItems: $scope.currentCategory,
+      columnDefs: [
+        {field: 'language', displayName:'Language', enableCellEdit: false},
+        {field: 'name', displayName: 'Name', enableCellEdit: true},
+        {displayName: 'Actions', enableCellEdit: false, cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteCategory(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
+      ],
+      showColumnMenu: true
+    };
+
+    $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
+
+    // get the collection from our data definitions
+    var categories = new TranslatedCategoriesService.collection();
+    var category = new CategoriesService.model();
+    category.id = $stateParams.categoryId;
+
+    categories.loadTranslationsOfCategory(category).then(function(foundCategories) {
+      $scope.updateData(foundCategories);
+    });
+
+    $scope.$on('ngGridEventEndCellEdit', function() {
+      var gridSelection = $scope.currentCategory[0];
+      if (gridSelection.name !== gridSelection.model.getName()) {
+        gridSelection.model.setName(gridSelection.name);
+        gridSelection.model.saveParse(); // TODO check for result and display an alert if not saved
+      }
+    });
+    
+    $scope.updateData = function(foundCategories) {
+      $scope.foundCategories = foundCategories;
+      $scope.categories = _.map(foundCategories.models, function(category) {
+        return {
+          id: category.id,
+          name: category.getName(),
+          language: category.getLanguage(),
+          model: category
+        };
+      });
+    };
+
+    $scope.create = function() {
+      if (!$scope.translation) { return ;}
+
+      $scope.foundCategories.addGeneralCategory(category, $scope.translation.language, $scope.translation.name).then(function() {
+        $scope.updateData($scope.foundCategories);
+      });
+        
+    };
+
+    $scope.deleteCategory = function(row) {
+      $scope.foundCategories.removeCategory(row.getProperty('model')).then(function() {
+        $scope.updateData($scope.foundCategories);
+      });
+    };
   }
 ]);

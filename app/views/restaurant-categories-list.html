@@ -1,6 +1,11 @@
 <div class="page-header">
-  <h1>General Categories</h1>
+  <h1>Categories of {{ currentRestaurant.getName() }}</h1>
 </div>
+<ol class="breadcrumb">
+  <li><a ui-sref="dashboard.restaurants">Home</a></li>
+  <li><a ui-sref="^">Restaurants</a></li>
+  <li class="active">{{ currentRestaurant.getName() }}</li>
+</ol>  
 <div class="row">
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -9,7 +14,7 @@
     <div class="panel-body">
         <form class="form-inline" role="form">
             <div class="form-group">
-                <label class="sr-only" for="restaurantName">Name:</label>
+                <label class="sr-only" for="name">Name:</label>
                 <input type="text" id="name" ng-model="category.name" placeholder="Category name">
             </div>
             <button type="submit" class="btn btn-primary" ng-click="create(category)">Create</button>

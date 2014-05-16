@@ -71,9 +71,25 @@ angular.module('ExternalDataServices')
 				_this.add(data);
 			});
 		},
+		addGeneralCategory: function(name) {
+			// save request_id to Parse
+			var _this = this;
+			var category = new Category();
+			category.setName(name);
+			return category.saveParse().then(function(data){
+				_this.add(data);
+			});
+		},
 		loadCategoriesOfRestaurant: function(restaurant) {
 			this.query = (new Parse.Query(Category));
 			this.query.equalTo('restaurant', restaurant);
+			this.query.ascending('name');
+			// use the enhanced load() function to fetch the collection
+			return this.load();
+		},
+		loadGeneralCategories: function() {
+			this.query = (new Parse.Query(Category));
+			this.query.equalTo('restaurant', null);
 			this.query.ascending('name');
 			// use the enhanced load() function to fetch the collection
 			return this.load();

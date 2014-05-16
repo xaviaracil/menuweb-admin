@@ -62,8 +62,8 @@ angular.module('menuwebAdminApp', [
       url: '/:restaurantId/categories',
       views: {
         '@dashboard': {
-          templateUrl: 'views/categories-list.html',
-          controller: 'AdminCategoriesListCtrl'
+          templateUrl: 'views/restaurant-categories-list.html',
+          controller: 'AdminRestaurantCategoriesListCtrl'
         }
       }
     })
@@ -96,6 +96,20 @@ angular.module('menuwebAdminApp', [
         '@dashboard': {
           templateUrl: 'views/translation-categories.html',
           controller: 'AdminTranslationCategoriesCtrl'
+        }
+      }
+    })
+    .state('dashboard.categories', {
+      url: '/categories',
+      templateUrl: 'views/categories-list.html',
+      controller: 'AdminCategoriesListCtrl'
+    })
+    .state('dashboard.categories.translations', {
+      url: '/:categoryId/translations',
+      views: {
+        '@dashboard': {
+          templateUrl: 'views/category-translation-list.html',
+          controller: 'AdminCategoryTranslationListCtrl'
         }
       }
     });

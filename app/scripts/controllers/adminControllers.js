@@ -56,9 +56,9 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
     };
 
     Parse.Cloud.run('languages', null, {
-        success: function(languages) {
-            $scope.languages = languages;
-        }
+      success: function(languages) {
+        $scope.languages = languages;
+      }
     });
 
     $scope.translations = [];
@@ -292,15 +292,15 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
     if (!isAuthenticated()) { return; }
 
     Parse.Cloud.run('languages', null, {
-        success: function(languages) {
-            $scope.languages = languages;
-        }
+      success: function(languages) {
+        $scope.languages = languages;
+      }
     });
 
     Parse.Cloud.run('priceranges', null, {
-        success: function(priceranges) {
-            $scope.priceranges = priceranges;
-        }
+      success: function(priceranges) {
+        $scope.priceranges = priceranges;
+      }
     });
 
     $scope.dishes = _(10).times(function() {
@@ -719,9 +719,9 @@ adminControllers.controller('AdminCategoryTranslationListCtrl', ['$scope', '$sta
     };
 
     Parse.Cloud.run('languages', null, {
-        success: function(languages) {
-            $scope.languages = languages;
-        }
+      success: function(languages) {
+        $scope.languages = languages;
+      }
     });
 
     // get the collection from our data definitions

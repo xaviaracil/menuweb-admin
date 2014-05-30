@@ -57,6 +57,14 @@ angular.module('ExternalDataServices')
 			// use the enhanced load() function to fetch the collection
 			return this.load();
 		},
+		loadGeneralCategoriesOfLanguage: function(language) {
+			this.query = new Parse.Query(TranslatedCategory);
+			this.query.include('category');
+			this.query.equalTo('language', language);
+			this.query.ascending('name'); // TODO: mirar que no ordena
+			// use the enhanced load() function to fetch the collection
+			return this.load();
+		},
 		addCategory: function(name, translation) {
 			// save request_id to Parse
 			var _this = this;
@@ -76,14 +84,13 @@ angular.module('ExternalDataServices')
 
 			var translatedCategory = new TranslatedCategory();
 			translatedCategory.setCategory(category);
-			translatedCategory.setName(name);			
+			translatedCategory.setName(name);
 			translatedCategory.setLanguage(language);
 
 			// use the extended Parse SDK to perform a save and return the promised object back into the Angular world
 			return translatedCategory.saveParse().then(function(data){
 				_this.add(data);
 			});
-            
         },
 		removeCategory:function(translatedCategory) {
 			if (!this.get(translatedCategory)) { return false; }

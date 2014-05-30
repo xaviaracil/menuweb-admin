@@ -55,7 +55,11 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
       $scope.markTranslation(row.getProperty('model'), false);
     };
 
-    $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
+    Parse.Cloud.run('languages', null, {
+        success: function(languages) {
+            $scope.languages = languages;
+        }
+    });
 
     $scope.translations = [];
     $scope.gridOptions = {
@@ -287,7 +291,18 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
     'use strict';
     if (!isAuthenticated()) { return; }
 
-    $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
+    Parse.Cloud.run('languages', null, {
+        success: function(languages) {
+            $scope.languages = languages;
+        }
+    });
+
+    Parse.Cloud.run('priceranges', null, {
+        success: function(priceranges) {
+            $scope.priceranges = priceranges;
+        }
+    });
+
     $scope.dishes = _(10).times(function() {
       return {name: 'Put dish name here', edited:false};
     });
@@ -373,6 +388,7 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
         latitude: $scope.map.clickedMarker.latitude,
         longitude: $scope.map.clickedMarker.longitude
       }));
+      newRestaurant.setPriceRange($scope.restaurant.pricerange);
       newRestaurant.saveParse().then(function(savedRestaurant){
         $rootScope.progress = (++currentStep * 100) / steps;
         $rootScope.progessAction = 'Creating translation ' + $scope.restaurant.language;
@@ -702,7 +718,11 @@ adminControllers.controller('AdminCategoryTranslationListCtrl', ['$scope', '$sta
       showColumnMenu: true
     };
 
-    $scope.languages = [{id:'es', name:'Castellano'}, {id:'ca', name:'Català'}, {id:'en', name:'English'}, {id:'fr', name:'Française'}]; // TODO: load from server?
+    Parse.Cloud.run('languages', null, {
+        success: function(languages) {
+            $scope.languages = languages;
+        }
+    });
 
     // get the collection from our data definitions
     var categories = new TranslatedCategoriesService.collection();

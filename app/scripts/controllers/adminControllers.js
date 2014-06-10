@@ -397,7 +397,7 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
         latitude: $scope.map.clickedMarker.latitude,
         longitude: $scope.map.clickedMarker.longitude
       }));
-      newRestaurant.setPriceRange($scope.restaurant.pricerange);      
+      newRestaurant.setPriceRange($scope.restaurant.pricerange);
       if ($scope.restaurant.logoFile) {
         newRestaurant.setLogoFile($scope.restaurant.logoFile);
       }
@@ -442,21 +442,21 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
     $scope.save = function() {
       $rootScope.progessAction = 'Preparing...';
       $rootScope.progress = 0;
-      
-      var fileUploadControl = $("#logoFile")[0];
+
+      var fileUploadControl = $('#logoFile')[0];
       if (fileUploadControl.files.length > 0) {
         var file = fileUploadControl.files[0];
         var parseFile = new Parse.File(file.name, file, file.type);
         parseFile.save().then(function(savedFile) {
           // The file has been saved to Parse.
           $scope.restaurant.logoFile = savedFile;
-          $('#save-modal').modal('show');        
+          $('#save-modal').modal('show');
         }, function(error) {
           // The file either could not be read, or could not be saved to Parse.
           $rootScope.progessAction = 'Got an error saving file: ' + error.code + ' - ' + error.message;
-        });        
+        });
       } else {
-        $('#save-modal').modal('show');        
+        $('#save-modal').modal('show');
       }
     };
 

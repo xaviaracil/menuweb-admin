@@ -120,12 +120,19 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', '$r
     'use strict';
     if (!isAuthenticated()) { return; }
 
+    Parse.Cloud.run('priceranges', null, {
+      success: function(priceranges) {
+        $scope.priceranges = priceranges;
+      }
+    });
+
     $scope.restaurants = [];
     $scope.gridOptions = {
       data: 'restaurants',
       columnDefs: [
         {field: 'name', displayName: 'Name'},
-        {field: 'normalizedName', displayName:'normalizedName'},
+        {field: 'address', displayName:'Address'},
+        {field: 'priceRange', displayName:'Price Range', width:'10%'},
         {field: 'completed', displayName:'Translated', width:'10%'},
         {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-info" ng-click="goToCategories(row)">Categories</button>&nbsp;<button type="button" class="btn btn-xs btn-info" ng-click="goToDishesCategories(row)">Dishes Categories</button>&nbsp;<button type="button" class="btn btn-xs btn-info" ng-click="goToDishes(row)">Dishes</button>&nbsp;<button type="button" class="btn btn-xs btn-danger" ng-click="deleteRestaurant(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
       ],
@@ -146,7 +153,8 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', '$r
         return {
           id: restaurant.id,
           name: restaurant.getName(),
-          normalizedName: restaurant.getNormalizedName(),
+          address: restaurant.getAddress(),
+          priceRange: restaurant.getPriceRange(),
           completed: restaurant.getTranslated(),
           model: restaurant
         };
@@ -379,6 +387,7 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
 
       var newRestaurant = new RestaurantService.model();
       newRestaurant.setName($scope.restaurant.name);
+      newRestaurant.setDescription($scope.restaurant.description);
       newRestaurant.setInitialLanguage($scope.restaurant.language);
       newRestaurant.setAddress($scope.restaurant.address);
       newRestaurant.setPostalCode($scope.restaurant.postalCode);
@@ -388,7 +397,10 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
         latitude: $scope.map.clickedMarker.latitude,
         longitude: $scope.map.clickedMarker.longitude
       }));
-      newRestaurant.setPriceRange($scope.restaurant.pricerange);
+      newRestaurant.setPriceRange($scope.restaurant.pricerange);      
+      if ($scope.restaurant.logoFile) {
+        newRestaurant.setLogoFile($scope.restaurant.logoFile);
+      }
       newRestaurant.saveParse().then(function(savedRestaurant){
         $rootScope.progress = (++currentStep * 100) / steps;
         $rootScope.progessAction = 'Creating translation ' + $scope.restaurant.language;
@@ -430,7 +442,22 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
     $scope.save = function() {
       $rootScope.progessAction = 'Preparing...';
       $rootScope.progress = 0;
-      $('#save-modal').modal('show');
+      
+      var fileUploadControl = $("#logoFile")[0];
+      if (fileUploadControl.files.length > 0) {
+        var file = fileUploadControl.files[0];
+        var parseFile = new Parse.File(file.name, file, file.type);
+        parseFile.save().then(function(savedFile) {
+          // The file has been saved to Parse.
+          $scope.restaurant.logoFile = savedFile;
+          $('#save-modal').modal('show');        
+        }, function(error) {
+          // The file either could not be read, or could not be saved to Parse.
+          $rootScope.progessAction = 'Got an error saving file: ' + error.code + ' - ' + error.message;
+        });        
+      } else {
+        $('#save-modal').modal('show');        
+      }
     };
 
     $scope.addDishes = function() {

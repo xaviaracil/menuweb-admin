@@ -24,28 +24,28 @@ angular.module('ExternalDataServices')
 			return this.get('location');
 		},
 		setAddress: function(address) {
-    		this.set('address', address);
+  		this.set('address', address);
 		},
 		getAddress: function() {
-    		return this.get('address');
+  		return this.get('address');
 		},
 		setPostalCode: function(postalCode) {
-    		this.set('postalCode', postalCode);
+  		this.set('postalCode', postalCode);
 		},
 		getPostalCode: function() {
-    		return this.get('postalCode');
+  		return this.get('postalCode');
 		},
 		setCity: function(city) {
-    		this.set('city', city);
+  		this.set('city', city);
 		},
 		getCity: function() {
-    		return this.get('city');
+  		return this.get('city');
 		},
 		setState: function(state) {
-    		this.set('state', state);
+  		this.set('state', state);
 		},
 		getState: function() {
-    		return this.get('state');
+  		return this.get('state');
 		},
 		setInitialLanguage: function(initialLanguage) {
 			this.set('initialLanguage', initialLanguage);
@@ -61,14 +61,26 @@ angular.module('ExternalDataServices')
 			return this.get('translated');
 		},
 		setPriceRange: function(pricerange) {
-    		this.set('priceRange', pricerange);
-    		return this;
+		  this.set('priceRange', pricerange);
+		  return this;
 		},
 		getPriceRange: function() {
-    		return this.get('priceRange');
+		  return this.get('priceRange');
 		},
-		getLogoUrl: function() {
-			return "img/icon.png"; // TODO change
+		setLogoFile: function(logoFile) {
+		  this.set("logoFile", logoFile);
+		  return this;
+		},
+		getLogoFile: function() {
+		  var logoFile = this.get("logoFile");
+			return logoFile ? logoFile.url() : "img/defaultIcon.png";
+		},
+		getDescription: function() {
+		  return this.get("description");
+		},
+		setDescription: function(description) {
+  		this.set("description", description);
+  		return this;
 		},
 		destroyParse:function(){
 			return ParseQueryAngular(this,{functionToCall:'destroy'}); // jshint ignore:line

@@ -479,6 +479,8 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
         return {
           id: dish.id,
           name: dish.getName(),
+          description: dish.getDescription(),
+          price: dish.getPrice(),
           category: dish.get('category') ? dish.get('category').get('name') : 'Uncategorized',
           model: dish
         };
@@ -490,6 +492,8 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
       data: 'dishes',
       columnDefs: [
         {field: 'name', displayName: 'Name'},
+        {field: 'description', displayName: 'Description'},
+        {field: 'price', displayName: 'Price'},        
         {field: 'category', displayName: 'Category'},
         {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteDish(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>', width:'10%'}
       ],
@@ -544,7 +548,7 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
         var steps = 1 + _.size(foundTranslations.models);
         var currentStep = 1;
         $rootScope.progress = (currentStep * 100) / steps;
-        $scope.foundDishes.addDish($scope.dish.name, $rootScope.currentRestaurant, category, foundTranslations, $rootScope, '#save-modal', currentStep, steps).then(function() {
+        $scope.foundDishes.addDish($scope.dish.name, $scope.dish.description, $scope.dish.price, $rootScope.currentRestaurant, category, foundTranslations, $rootScope, '#save-modal', currentStep, steps).then(function() {
           $scope.updateData($scope.foundDishes);
         });
       });

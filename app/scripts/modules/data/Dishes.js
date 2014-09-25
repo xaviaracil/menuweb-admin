@@ -28,6 +28,20 @@ angular.module('ExternalDataServices')
 		getCategory: function() {
     		return this.get('category');
 		},
+		getDescription: function() {
+  		return this.get('description');
+		},
+		setDescription: function(description) {
+  		this.set('description', description);
+  		return this;
+		},
+		getPrice: function() {
+  		return this.get('price');  		
+		},
+		setPrice: function(price) {
+  		this.set('price', price);
+  		return this;
+		},
 		destroyParse:function(){
 			return ParseQueryAngular(this,{functionToCall:'destroy'}); // jshint ignore:line
 		}
@@ -38,12 +52,14 @@ angular.module('ExternalDataServices')
 		comparator: function(model) {
 			return -model.createdAt.getTime();
 		},
-		addDish: function(name, restaurant, category, translations, $rootScope, modal, currentStep, steps) {
+		addDish: function(name, description, price, restaurant, category, translations, $rootScope, modal, currentStep, steps) {
 			// save request_id to Parse
 			var _this = this;
 
 			var dish = new Dish();
 			dish.setName(name);
+			dish.setDescription(description);
+			dish.setPrice(price);
 			dish.setRestaurant(restaurant);
             dish.setCategory(category);
 

@@ -493,7 +493,7 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
       columnDefs: [
         {field: 'name', displayName: 'Name'},
         {field: 'description', displayName: 'Description'},
-        {field: 'price', displayName: 'Price'},        
+        {field: 'price', displayName: 'Price'},
         {field: 'category', displayName: 'Category'},
         {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-danger" ng-click="deleteDish(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>', width:'10%'}
       ],

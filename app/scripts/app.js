@@ -9,7 +9,8 @@ angular.module('menuwebAdminApp', [
   'ExternalDataServices',
   'google-maps',
   'ngGrid',
-  'ui.router'
+  'ui.router',
+  'ja.qr'
 ])
 
 .config(function($stateProvider, $urlRouterProvider) {

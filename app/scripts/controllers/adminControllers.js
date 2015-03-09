@@ -132,12 +132,13 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', '$r
       columnDefs: [
         {field: 'name', displayName: 'Name'},
         {field: 'address', displayName:'Address'},
+        {field: 'qr', displayName:'QR Code', width: '5%', cellTemplate: '<div class="ngCellText"><button data-target="#restaurantModal" type="button" class="btn btn-xs btn-link" ng-click="showQR(row)" data-toggle="modal"><span class="glyphicon glyphicon-qrcode"></span></button></div>'},
         {field: 'priceRange', displayName:'Price Range', width:'10%'},
         {field: 'completed', displayName:'Translated', width:'10%'},
         {displayName: 'Actions', cellTemplate: '<div class="ngCellText"><button type="button" class="btn btn-xs btn-info" ng-click="goToCategories(row)">Categories</button>&nbsp;<button type="button" class="btn btn-xs btn-info" ng-click="goToDishesCategories(row)">Dishes Categories</button>&nbsp;<button type="button" class="btn btn-xs btn-info" ng-click="goToDishes(row)">Dishes</button>&nbsp;<button type="button" class="btn btn-xs btn-danger" ng-click="deleteRestaurant(row)"><span class="glyphicon glyphicon-remove-sign"></span> Delete</button></div>'}
       ],
       showColumnMenu: true,
-      afterSelectionChange: $scope.onRowSelected,
+      //afterSelectionChange: $scope.onRowSelected,
       rowTemplate: 'views/templates/admin-restaurant-row.html'
     };
 
@@ -156,9 +157,21 @@ adminControllers.controller('AdminRestaurantsListCtrl', ['$scope', '$state', '$r
           address: restaurant.getAddress(),
           priceRange: restaurant.getPriceRange(),
           completed: restaurant.getTranslated(),
-          model: restaurant
+          model: restaurant,
+          url: 'http://menu-web.laibeth.com/#/restaurants/' + restaurant.id
         };
       });
+    };
+
+    $rootScope.selectedRestaurant = {
+      name: '',
+      url: ''
+    };
+    $scope.showQR = function(row) {
+      $rootScope.selectedRestaurant = {
+        name: row.getProperty('name'),
+        url: row.getProperty('url')
+      };
     };
 
     $scope.deleteRestaurant = function(row) {
@@ -204,6 +217,8 @@ adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$state
       columnDefs: [
         {field: 'name', displayName: 'Name', enableCellEdit: false},
         {field: 'translation', displayName:'Translation', enableCellEdit: true},
+        {field: 'description', displayName:'Description', enableCellEdit: false},
+        {field: 'translatedDescription', displayName:'Translation', enableCellEdit: true},
       ],
       showColumnMenu: true
     };
@@ -219,6 +234,8 @@ adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$state
           id: dish.id,
           name: dish.get('dish').get('name'),
           translation: dish.getName(),
+          description: dish.get('dish').get('description'),
+          translatedDescription: dish.getDescription(),
           model: dish
         };
       });
@@ -226,8 +243,18 @@ adminControllers.controller('AdminTranslationCtrl', ['$scope', '$state', '$state
 
     $scope.$on('ngGridEventEndCellEdit', function() {
       var gridSelection = $scope.currentDish[0];
+      console.log(gridSelection, gridSelection.translation, gridSelection.model.getName(), gridSelection.translatedDescription, gridSelection.model.getDescription());
+      var dirty = false;
       if (gridSelection.translation !== gridSelection.model.getName()) {
         gridSelection.model.setName(gridSelection.translation);
+        dirty = true;
+      }
+      if (gridSelection.translatedDescription !== gridSelection.model.getDescription()) {
+        gridSelection.model.setDescription(gridSelection.translatedDescription);
+        dirty = true;
+      }
+      if (dirty) {
+        console.log('saving...');
         gridSelection.model.saveParse(); // TODO check for result and display an alert if not saved
       }
     });

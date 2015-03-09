@@ -14,6 +14,13 @@ angular.module('ExternalDataServices')
 		getName: function() {
 			return this.get('name');
 		},
+		setDescription: function(description) {
+			this.set('description', description);
+			return this;
+		},
+		getDescription: function() {
+			return this.get('description');
+		},
 		setTranslation: function(translation) {
 			this.set('translation', translation);
 			return this;

@@ -89,6 +89,8 @@ adminControllers.controller('AdminTranslationListCtrl', ['$scope', '$state', 'Pa
       $scope.restaurants = foundRestaurants.models;
     });
 
+    $('#save-modal').off('hidden.bs.modal');
+    $('#save-modal').off('shown.bs.modal');
     $('#save-modal').on('shown.bs.modal', function() {
       if (!$scope.translation) { return ;}
 
@@ -338,6 +340,8 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
       }
     });
 
+    // init values
+    $scope.restaurant = {};
     $scope.dishes = _(10).times(function() {
       return {name: 'Put dish name here', edited:false};
     });
@@ -391,6 +395,8 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
       }
     };
 
+    $('#save-modal').off('hidden.bs.modal');
+    $('#save-modal').off('shown.bs.modal');
     $('#save-modal').on('hidden.bs.modal', function() {
       if (!$scope.restaurant) { return ;}
       $state.go('^');
@@ -478,6 +484,7 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
           // The file has been saved to Parse.
           $scope.restaurant.logoFile = savedFile;
           $('#save-modal').modal('show');
+
         }, function(error) {
           // The file either could not be read, or could not be saved to Parse.
           $rootScope.progessAction = 'Got an error saving file: ' + error.code + ' - ' + error.message;
@@ -560,6 +567,8 @@ adminControllers.controller('AdminDishesListCtrl', ['$scope', '$state', '$stateP
       $('#save-modal').modal('show');
     };
 
+    $('#save-modal').off('hidden.bs.modal');
+    $('#save-modal').off('shown.bs.modal');
     $('#save-modal').on('shown.bs.modal', function() {
       if (!$scope.dish) { return ;}
       console.log($scope.dish);
@@ -631,6 +640,8 @@ adminControllers.controller('AdminRestaurantCategoriesListCtrl', ['$scope', '$st
       $('#save-modal').modal('show');
     };
 
+    $('#save-modal').off('hidden.bs.modal');
+    $('#save-modal').off('shown.bs.modal');
     $('#save-modal').on('shown.bs.modal', function() {
       if (!$scope.category) { return ;}
 

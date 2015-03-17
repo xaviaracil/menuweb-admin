@@ -344,9 +344,14 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
     $scope.restaurant = {
       categories: []
     };
-    $scope.dishes = _(10).times(function() {
-      return {name: 'Put dish name here', edited:false};
-    });
+    var dishPlaceHolder = function() {
+      return {name: 'Put dish name here', description: 'Put description here', price: '10.0', edited:false};
+    };
+    var dishCategoryPlaceHolder = function() {
+      return {name: 'Put category name here', id: '', edited:false};
+    };
+    $scope.dishes = _(10).times(dishPlaceHolder);
+    $scope.dishesCategory = _(10).times(dishCategoryPlaceHolder);
 
     // load general categories
     $scope.categories = [];
@@ -362,12 +367,8 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
 
     // toggleSelection
     $scope.toggleSelection = function(categoryId) {
-      var findCategoryById = function(category) {
-        return category.id === categoryId;
-      };
-
+      var findCategoryById = function(category) { return category.id === categoryId; };
       var idx = _.findIndex($scope.restaurant.categories, findCategoryById);
-      console.log('toogleSelection', idx);
       // is currently selected
       if (idx > -1) {
         $scope.restaurant.categories.splice(idx, 1);
@@ -375,7 +376,6 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
         // is newly selected
         $scope.restaurant.categories.push(_.find($scope.categories, findCategoryById));
       }
-      console.log($scope.restaurant.categories);
     };
 
     $scope.map = {
@@ -416,8 +416,28 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
       enableRowSelection: false,
       multiSelect: false,
       columnDefs: [
+        {field: 'name', displayName: 'Name', enableCellEdit: true},
+        {field: 'description', displayName: 'Description', enableCellEdit: true},
+        {field: 'category', displayName: 'Category', enableCellEdit:false, cellTemplate: '<div class="ngCellText"><select class="form-control" ng-model="row.entity.category" ng-options="c.name as c.name for c in dishesCategory"></select></div>'},
+        {field: 'price', displayName: 'Price', enableCellEdit: true}
+      ],
+      beforeSelectionChange: function(rowItem) {
+        if (!rowItem.entity.edited) {
+          rowItem.entity.name = '';
+          rowItem.entity.edited = true;
+        }
+        return true;
+      }
+    };
+
+    $scope.dishesCategoryGridOptions = {
+      data: 'dishesCategory',
+      enableCellSelection: true,
+      enableCellEditOnFocus: true,
+      enableRowSelection: false,
+      multiSelect: false,
+      columnDefs: [
         {field: 'name', displayName: 'Name', enableCellEdit: true}
-        // TODO: add description, category & price
       ],
       beforeSelectionChange: function(rowItem) {
         if (!rowItem.entity.edited) {
@@ -447,10 +467,13 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
         return;
       }
       $rootScope.progessAction = 'Creating restaurant ' + $scope.restaurant.name;
-      var steps = 1 + 1 + _.size(_.filter($scope.dishes, function(dish) {return dish.edited && dish.name && dish.name !== ''; }));
+      var dishSteps = _.size(_.filter($scope.dishes, function(dish) {return dish.edited && dish.name && dish.name !== ''; }));
+      var categoriesSteps = _.size(_.filter($scope.dishesCategory, function(category) {return category.edited && category.name && category.name !== '';}));
+      var steps = 1 + 1 + dishSteps + categoriesSteps;
       var currentStep = 1;
       $rootScope.progress = (currentStep * 100) / steps;
 
+      // create restaurant
       var newRestaurant = new RestaurantService.model();
       newRestaurant.setName($scope.restaurant.name);
       newRestaurant.setDescription($scope.restaurant.description);
@@ -468,11 +491,10 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
         newRestaurant.setLogoFile($scope.restaurant.logoFile);
       }
       // categories
-      console.log('Categories to add', $scope.restaurant.categories);
       _.each($scope.restaurant.categories, function(c) {
-        newRestaurant.addUnique('generalCategories', c);
+        newRestaurant.addUnique('generalCategories', categories.get(c.id));
       });
-      // TODO add categories!!!
+
       newRestaurant.saveParse().then(function(savedRestaurant){
         $rootScope.progress = (++currentStep * 100) / steps;
         $rootScope.progessAction = 'Creating translation ' + $scope.restaurant.language;
@@ -482,31 +504,78 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
         translation.setCompleted(true);
         translation.setRestaurant(savedRestaurant);
         translation.saveParse().then(function(savedTranslation) {
-          // dishes and translated dished with initial language
-          _.each($scope.dishes, function(dish) {
-            if (dish.edited && dish.name && dish.name !== '') {
-              $rootScope.progress = (++currentStep * 100) / steps;
-              $rootScope.progessAction = 'Creating dish ' + dish.name;
-
-              var newDish = new DishesService.model();
-              newDish.setName(dish.name);
-              newDish.setRestaurant(savedRestaurant);
-              newDish.saveParse().then(function(savedDish) {
-
-                var translatedDish = new TranslatedDishesService.model();
-                translatedDish.setDish(savedDish);
-                translatedDish.setTranslation(savedTranslation);
-                translatedDish.setName(savedDish.getName());
-                translatedDish.saveParse().then(function() {
-                  if(currentStep === steps) {
-                    $rootScope.progress = 100;
-                    $rootScope.progessAction = 'Created!';
-                    $('#save-modal').modal('hide');
-                  }
-                });
-              });
+          // create categories
+          var categoriesService = new CategoriesService.collection();
+          
+          var checkDishes = function() {
+            if (dishSteps > 0) {
+              saveDishes(currentStep, steps, savedRestaurant, savedTranslation);
+            } else {
+              // hide
+              $rootScope.progress = 100;
+              $rootScope.progessAction = 'Created!';
+              $('#save-modal').modal('hide');
             }
-          });
+          };
+
+          var saveDishes = function() {
+
+            // dishes and translated dished with initial language
+            _.each($scope.dishes, function(dish) {
+              if (dish.edited && dish.name && dish.name !== '') {
+                $rootScope.progress = (++currentStep * 100) / steps;
+                $rootScope.progessAction = 'Creating dish ' + dish.name;
+
+                var newDish = new DishesService.model();
+                newDish.setName(dish.name);
+                if (dish.description && dish.description !== '' && dish.description !== 'Put description here') {
+                  newDish.setDescription(dish.description);
+                }
+                newDish.setPrice(dish.price);
+                if (dish.category && dish.category !== '' && dish.category !== 'Put category name here') {
+                  var dishCategory = _.find($scope.dishesCategory, function(c) { return c.name === dish.category;});
+                  newDish.setCategory(categoriesService.get(dishCategory.id));
+                }
+                newDish.setRestaurant(savedRestaurant);
+                newDish.saveParse().then(function(savedDish) {
+
+                  var translatedDish = new TranslatedDishesService.model();
+                  translatedDish.setDish(savedDish);
+                  translatedDish.setTranslation(savedTranslation);
+                  translatedDish.setName(savedDish.getName());
+                  translatedDish.saveParse().then(function() {
+                    if(currentStep === steps) {
+                      $rootScope.progress = 100;
+                      $rootScope.progessAction = 'Created!';
+                      $('#save-modal').modal('hide');
+                    }
+                  });
+                });
+              }
+            });
+          };
+
+          if (categoriesSteps > 0) {
+            var currentCategoryStep = 1;
+            _.each($scope.dishesCategory, function(category) {
+              if (category.edited && category.name && category.name !== '') {
+                $rootScope.progress = (++currentStep * 100) / steps;
+                categoriesService.addCategory(category.name, savedRestaurant, {models:[savedTranslation]}, $rootScope, '#save-modal', currentStep, steps);
+                if (currentCategoryStep === categoriesSteps) {
+                  categoriesService.loadCategoriesOfRestaurant(savedRestaurant).then(function(foundCategories) {
+                    _.each(foundCategories.models, function(c) {
+                      _.find($scope.dishesCategory, function(dc) { return dc.name === c.getName();}).id = c.id;
+                    });
+                    checkDishes();
+                  });
+                } else {
+                  currentCategoryStep++;
+                }
+              }
+            });
+          } else {
+            checkDishes();
+          }
         });
       });
     });
@@ -534,9 +603,11 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
     };
 
     $scope.addDishes = function() {
-      _(10).times(function() {
-        $scope.dishes.push({name: 'Put dish name here', edited: false});
-      });
+      _(10).times(dishPlaceHolder);
+    };
+
+    $scope.addCategories = function() {
+      _(10).times(dishCategoryPlaceHolder);
     };
   }
 ]);

@@ -11,6 +11,11 @@ body { padding-bottom: 70px; }
 
 .gridStyle { height: 400px; }
 
+// form
+.controls label.checkbox {
+  font-weight: normal;
+}
+
 // slide
 .slide.ng-leave {
   position: relative;

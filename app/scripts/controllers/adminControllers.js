@@ -323,8 +323,8 @@ adminControllers.controller('AdminRestaurantCtrl', ['$scope', '$state', '$stateP
   }
 ]);
 
-adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', 'DishesService', 'TranslatedDishesService','$rootScope', 'isAuthenticated',
-  function($scope, $state, $routeParams, ParseQueryAngular, RestaurantService, TranslationService, DishesService, TranslatedDishesService, $rootScope, isAuthenticated) {
+adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$stateParams', 'ParseQueryAngular', 'RestaurantService', 'TranslationService', 'DishesService', 'TranslatedDishesService','$rootScope', 'isAuthenticated', 'CategoriesService',
+  function($scope, $state, $routeParams, ParseQueryAngular, RestaurantService, TranslationService, DishesService, TranslatedDishesService, $rootScope, isAuthenticated, CategoriesService) {
     'use strict';
     if (!isAuthenticated()) { return; }
 
@@ -341,10 +341,42 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
     });
 
     // init values
-    $scope.restaurant = {};
+    $scope.restaurant = {
+      categories: []
+    };
     $scope.dishes = _(10).times(function() {
       return {name: 'Put dish name here', edited:false};
     });
+
+    // load general categories
+    $scope.categories = [];
+    var categories = new CategoriesService.collection();
+    categories.loadGeneralCategories().then(function(foundCategories) {
+      $scope.categories = _.map(foundCategories.models, function(c) {
+        return {
+          id: c.id,
+          name: c.getName()
+        };
+      });
+    });
+
+    // toggleSelection
+    $scope.toggleSelection = function(categoryId) {
+      var findCategoryById = function(category) {
+        return category.id === categoryId;
+      };
+
+      var idx = _.findIndex($scope.restaurant.categories, findCategoryById);
+      console.log('toogleSelection', idx);
+      // is currently selected
+      if (idx > -1) {
+        $scope.restaurant.categories.splice(idx, 1);
+      } else {
+        // is newly selected
+        $scope.restaurant.categories.push(_.find($scope.categories, findCategoryById));
+      }
+      console.log($scope.restaurant.categories);
+    };
 
     $scope.map = {
       center: {
@@ -385,6 +417,7 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
       multiSelect: false,
       columnDefs: [
         {field: 'name', displayName: 'Name', enableCellEdit: true}
+        // TODO: add description, category & price
       ],
       beforeSelectionChange: function(rowItem) {
         if (!rowItem.entity.edited) {
@@ -434,6 +467,12 @@ adminControllers.controller('AdminRestaurantsNewCtrl', ['$scope', '$state', '$st
       if ($scope.restaurant.logoFile) {
         newRestaurant.setLogoFile($scope.restaurant.logoFile);
       }
+      // categories
+      console.log('Categories to add', $scope.restaurant.categories);
+      _.each($scope.restaurant.categories, function(c) {
+        newRestaurant.addUnique('generalCategories', c);
+      });
+      // TODO add categories!!!
       newRestaurant.saveParse().then(function(savedRestaurant){
         $rootScope.progress = (++currentStep * 100) / steps;
         $rootScope.progessAction = 'Creating translation ' + $scope.restaurant.language;

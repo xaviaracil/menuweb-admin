@@ -1,0 +1,17 @@
+{ "results": [
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            },
+            "j6W2im92jY": {
+                "read": true,
+                "write": true
+            }
+        },
+        "createdAt": "2014-02-27T18:15:06.482Z",
+        "name": "translators",
+        "objectId": "05MHW7qD8h",
+        "updatedAt": "2014-02-27T18:15:35.335Z"
+    }
+] }

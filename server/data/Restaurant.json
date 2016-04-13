@@ -1,0 +1,565 @@
+{ "results": [
+	{
+        "address": "sdfsdfds",
+        "city": "sdfds",
+        "createdAt": "2015-03-17T22:14:15.110Z",
+        "description": "ddd",
+        "generalCategories": [
+            {
+                "__type": "Pointer",
+                "className": "Category",
+                "objectId": "rqKLTeCa43"
+            }
+        ],
+        "initialLanguage": "es",
+        "languages": [
+            "es"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.4070721154624,
+            "longitude": 2.118043899536133
+        },
+        "name": "Test33",
+        "normalizedName": "test33",
+        "objectId": "2DxwQ5CTRz",
+        "postalCode": "dsfds",
+        "priceRange": 1,
+        "state": "sdfds",
+        "translated": true,
+        "translationNumber": 1,
+        "updatedAt": "2015-03-17T22:14:15.595Z"
+    },
+	{
+        "address": "Carrer d'Aribau, 117",
+        "city": "Barcelona",
+        "createdAt": "2015-03-04T00:19:55.779Z",
+        "description": "Cocina mediterránea inspirada en la Provenza",
+        "initialLanguage": "es",
+        "languages": [
+            "es"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.391008432272656,
+            "longitude": 2.1557745337486267
+        },
+        "logoFile": {
+            "__type": "File",
+            "name": "tfss-e770ab01-4f67-48a9-9d56-49f52026fb85-LA CAMARGA.png",
+            "url": "http://files.parsetfss.com/3f9dd027-9996-46f0-a01e-f38db350a98e/tfss-e770ab01-4f67-48a9-9d56-49f52026fb85-LA%20CAMARGA.png"
+        },
+        "name": "La Camarga",
+        "normalizedName": "la camarga",
+        "objectId": "3akt3Wcch7",
+        "postalCode": "08036",
+        "priceRange": 1,
+        "state": "Barcelona",
+        "translated": true,
+        "translationNumber": 1,
+        "updatedAt": "2015-03-04T00:19:56.238Z"
+    },
+	{
+        "address": "Còrsega 200",
+        "city": "Barcelona",
+        "createdAt": "2015-03-04T00:15:45.913Z",
+        "description": "Carles Gaig - Cuina de Mercat",
+        "initialLanguage": "es",
+        "languages": [
+            "es"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.39109093377376,
+            "longitude": 2.1522246301174164
+        },
+        "logoFile": {
+            "__type": "File",
+            "name": "tfss-afea1c06-1647-4a59-801e-66c178b43966-LOGO GAIG.jpg",
+            "url": "http://files.parsetfss.com/3f9dd027-9996-46f0-a01e-f38db350a98e/tfss-afea1c06-1647-4a59-801e-66c178b43966-LOGO%20GAIG.jpg"
+        },
+        "name": "Gaig",
+        "normalizedName": "gaig",
+        "objectId": "5LI9nNBN3r",
+        "postalCode": "08036",
+        "priceRange": 2,
+        "state": "Barcelona",
+        "translated": true,
+        "translationNumber": 1,
+        "updatedAt": "2015-03-04T00:15:46.528Z"
+    },
+	{
+        "address": "sadas",
+        "city": "asdas",
+        "createdAt": "2015-03-17T22:24:36.186Z",
+        "description": "sdasdas",
+        "generalCategories": [
+            {
+                "__type": "Pointer",
+                "className": "Category",
+                "objectId": "v6zVOjw6bM"
+            }
+        ],
+        "initialLanguage": "es",
+        "languages": [
+            "es"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.36869296404657,
+            "longitude": 2.1643924713134766
+        },
+        "name": "TEST 36",
+        "normalizedName": "test 36",
+        "objectId": "7GwdXpjry5",
+        "postalCode": "asasasdsa",
+        "priceRange": 1,
+        "state": "asdas",
+        "translated": true,
+        "translationNumber": 1,
+        "updatedAt": "2015-03-17T22:24:36.869Z"
+    },
+	{
+        "address": "Carrer de Còrsega, 255",
+        "city": "Barcelona",
+        "createdAt": "2015-03-04T00:28:36.157Z",
+        "description": "Cocina de vanguardia",
+        "initialLanguage": "es",
+        "languages": [
+            "es"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.39293612291653,
+            "longitude": 2.1544870734214783
+        },
+        "logoFile": {
+            "__type": "File",
+            "name": "tfss-a0d9ccb6-656d-433c-8934-b472fca88335-LOGO MIRROR.jpg",
+            "url": "http://files.parsetfss.com/3f9dd027-9996-46f0-a01e-f38db350a98e/tfss-a0d9ccb6-656d-433c-8934-b472fca88335-LOGO%20MIRROR.jpg"
+        },
+        "name": "The Mirror",
+        "normalizedName": "the mirror",
+        "objectId": "8PjHUvyANr",
+        "postalCode": "08036",
+        "priceRange": 2,
+        "state": "Barcelona",
+        "translated": true,
+        "translationNumber": 1,
+        "updatedAt": "2015-03-04T00:28:37.488Z"
+    },
+	{
+        "address": "Muntaner 82",
+        "city": "Barcelona",
+        "createdAt": "2015-03-04T00:08:09.324Z",
+        "description": "Restaurant Indochine",
+        "initialLanguage": "es",
+        "languages": [
+            "es"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.38778877973097,
+            "longitude": 2.1579524874687195
+        },
+        "logoFile": {
+            "__type": "File",
+            "name": "tfss-5b4eb3bc-0ce8-4132-a729-6219e7de786c-indochine.png",
+            "url": "http://files.parsetfss.com/3f9dd027-9996-46f0-a01e-f38db350a98e/tfss-5b4eb3bc-0ce8-4132-a729-6219e7de786c-indochine.png"
+        },
+        "name": "Indochine",
+        "normalizedName": "indochine",
+        "objectId": "Byl01AQzew",
+        "postalCode": "08011",
+        "priceRange": 1,
+        "state": "Barcelona",
+        "translated": true,
+        "translationNumber": 1,
+        "updatedAt": "2015-03-04T00:08:10.014Z"
+    },
+	{
+        "address": "sadas",
+        "city": "sadas",
+        "createdAt": "2015-03-17T22:06:36.750Z",
+        "description": "sdasdas",
+        "generalCategories": [
+            {
+                "__type": "Pointer",
+                "className": "Category",
+                "objectId": "VxFYFczRnk"
+            }
+        ],
+        "initialLanguage": "ca",
+        "languages": [
+            "ca"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.40835961356489,
+            "longitude": 2.1643924713134766
+        },
+        "name": "Test30",
+        "normalizedName": "test30",
+        "objectId": "D0Z9FiITW3",
+        "postalCode": "asdas",
+        "priceRange": 0,
+        "state": "asdsa",
+        "translated": true,
+        "translationNumber": 1,
+        "updatedAt": "2015-03-17T22:06:37.248Z"
+    },
+	{
+        "address": "CALLES DE ANDORRA",
+        "city": "ANDORRA",
+        "createdAt": "2015-03-13T17:02:15.049Z",
+        "description": "PRUEBA 1 RESTAURANT",
+        "initialLanguage": "ca",
+        "languages": [
+            "ca",
+            "es",
+            "en"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 42.50795132516904,
+            "longitude": 1.530146598815918
+        },
+        "logoFile": {
+            "__type": "File",
+            "name": "tfss-c66dc646-ba0b-433e-a781-5ab2a79598c2-11.jpg",
+            "url": "http://files.parsetfss.com/3f9dd027-9996-46f0-a01e-f38db350a98e/tfss-c66dc646-ba0b-433e-a781-5ab2a79598c2-11.jpg"
+        },
+        "name": "PRUEBA 1",
+        "normalizedName": "prueba 1",
+        "objectId": "JCRfy6wQla",
+        "postalCode": "08016",
+        "priceRange": 1,
+        "state": "GIRONA",
+        "translated": false,
+        "translationNumber": 3,
+        "updatedAt": "2015-03-13T17:24:02.388Z"
+    },
+	{
+        "address": "ALFONS XII 15 BAJOS BARCELONA\nB61529319",
+        "city": "BARCELONA",
+        "createdAt": "2015-03-25T16:31:41.376Z",
+        "description": "Delivery \u0026 Restaurant",
+        "generalCategories": [
+            {
+                "__type": "Pointer",
+                "className": "Category",
+                "objectId": "1Wqb65Yabc"
+            },
+            {
+                "__type": "Pointer",
+                "className": "Category",
+                "objectId": "7j3i4saeHI"
+            }
+        ],
+        "initialLanguage": "es",
+        "languages": [
+            "es",
+            "ca"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.39789996501755,
+            "longitude": 2.1501579880714417
+        },
+        "logoFile": {
+            "__type": "File",
+            "name": "tfss-0f4fb16e-c5a7-4ee1-9cbc-5d27fb84c2e6-LOGO BOSTON B.CAL..jpg",
+            "url": "http://files.parsetfss.com/3f9dd027-9996-46f0-a01e-f38db350a98e/tfss-0f4fb16e-c5a7-4ee1-9cbc-5d27fb84c2e6-LOGO%20BOSTON%20B.CAL..jpg"
+        },
+        "name": "Boston Pizza",
+        "normalizedName": "boston pizza",
+        "objectId": "JFgvFZ5fxs",
+        "postalCode": "08006",
+        "priceRange": 1,
+        "state": "Barcelona",
+        "translated": false,
+        "translationNumber": 2,
+        "updatedAt": "2015-03-26T10:23:37.331Z"
+    },
+	{
+        "address": "Carrer de Muntaner, 171",
+        "city": "Barcelona",
+        "createdAt": "2015-03-04T00:39:18.368Z",
+        "description": "Tapas creativas",
+        "initialLanguage": "es",
+        "languages": [
+            "es"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.39158292225905,
+            "longitude": 2.152576670050621
+        },
+        "logoFile": {
+            "__type": "File",
+            "name": "tfss-5efb8079-0001-4820-81ba-779533bff5c1-LOGO PACO MERALGO.jpg",
+            "url": "http://files.parsetfss.com/3f9dd027-9996-46f0-a01e-f38db350a98e/tfss-5efb8079-0001-4820-81ba-779533bff5c1-LOGO%20PACO%20MERALGO.jpg"
+        },
+        "name": "Paco Meralgo",
+        "normalizedName": "paco meralgo",
+        "objectId": "QbnDUvpGdU",
+        "postalCode": "08036",
+        "priceRange": 1,
+        "state": "Barcelona",
+        "translated": true,
+        "translationNumber": 1,
+        "updatedAt": "2015-03-04T00:39:19.173Z"
+    },
+	{
+        "address": "sadasda",
+        "city": "asdsa",
+        "createdAt": "2015-03-17T22:16:19.638Z",
+        "description": "sdasdsa",
+        "generalCategories": [
+            {
+                "__type": "Pointer",
+                "className": "Category",
+                "objectId": "VxFYFczRnk"
+            }
+        ],
+        "initialLanguage": "ca",
+        "languages": [
+            "ca"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.402565671186686,
+            "longitude": 2.1365833282470703
+        },
+        "name": "Test 34",
+        "normalizedName": "test 34",
+        "objectId": "TQHr3hW64z",
+        "postalCode": "sadas",
+        "priceRange": 4,
+        "state": "asdas",
+        "translated": true,
+        "translationNumber": 1,
+        "updatedAt": "2015-03-17T22:16:20.219Z"
+    },
+	{
+        "address": "Carrer de Muntaner, 121",
+        "city": "Barcelona",
+        "createdAt": "2015-03-04T00:34:26.917Z",
+        "description": "Brasería, pizzería",
+        "initialLanguage": "es",
+        "languages": [
+            "es"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.389730651753126,
+            "longitude": 2.155209258198738
+        },
+        "logoFile": {
+            "__type": "File",
+            "name": "tfss-474c946d-3323-437a-881e-d231b6623b42-MAUR MUNTANER.jpg",
+            "url": "http://files.parsetfss.com/3f9dd027-9996-46f0-a01e-f38db350a98e/tfss-474c946d-3323-437a-881e-d231b6623b42-MAUR%20MUNTANER.jpg"
+        },
+        "name": "Maur Muntaner",
+        "normalizedName": "maur muntaner",
+        "objectId": "WoEFaDKcYb",
+        "postalCode": "08036",
+        "priceRange": 1,
+        "state": "Barcelona",
+        "translated": true,
+        "translationNumber": 1,
+        "updatedAt": "2015-03-04T00:34:28.610Z"
+    },
+	{
+        "address": "sadas",
+        "city": "sadas",
+        "createdAt": "2015-03-17T22:09:26.785Z",
+        "description": "sdasdas",
+        "generalCategories": [
+            {
+                "__type": "Pointer",
+                "className": "Category",
+                "objectId": "rqKLTeCa43"
+            }
+        ],
+        "initialLanguage": "ca",
+        "languages": [
+            "ca"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.39097623653649,
+            "longitude": 2.133321762084961
+        },
+        "name": "Test 31",
+        "normalizedName": "test 31",
+        "objectId": "WznuBn4DLF",
+        "postalCode": "sadas",
+        "priceRange": 1,
+        "state": "asdas",
+        "translated": true,
+        "translationNumber": 1,
+        "updatedAt": "2015-03-17T22:09:27.325Z"
+    },
+	{
+        "address": "sadasdsa",
+        "city": "sadasda",
+        "createdAt": "2015-03-17T22:22:51.601Z",
+        "description": "asdasdsa",
+        "generalCategories": [
+            {
+                "__type": "Pointer",
+                "className": "Category",
+                "objectId": "rqKLTeCa43"
+            }
+        ],
+        "initialLanguage": "es",
+        "languages": [
+            "es"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.40900335304861,
+            "longitude": 2.1037960052490234
+        },
+        "name": "Test 35",
+        "normalizedName": "test 35",
+        "objectId": "c18j9V7zx6",
+        "postalCode": "asdas",
+        "priceRange": 0,
+        "state": "asdasda",
+        "translated": true,
+        "translationNumber": 1,
+        "updatedAt": "2015-03-17T22:22:52.140Z"
+    },
+	{
+        "address": "SANT BONAVENTURA 3, SANT CUGAT DEL VALLÈS",
+        "city": "BARCELONA",
+        "createdAt": "2015-03-07T19:15:45.073Z",
+        "description": "Restaurante argentino.\nCarnes de todo el mundo.",
+        "initialLanguage": "es",
+        "languages": [
+            "es",
+            "en",
+            "fr"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.47009534962767,
+            "longitude": 2.0817938446998596
+        },
+        "logoFile": {
+            "__type": "File",
+            "name": "tfss-44042dff-2f43-4f62-b07f-5224e6fa2f6d-logo 9 reinas.jpg",
+            "url": "http://files.parsetfss.com/3f9dd027-9996-46f0-a01e-f38db350a98e/tfss-44042dff-2f43-4f62-b07f-5224e6fa2f6d-logo%209%20reinas.jpg"
+        },
+        "name": "9Reinas - Sant Cugat",
+        "normalizedName": "9reinas - sant cugat",
+        "objectId": "fu5N1sWnun",
+        "postalCode": "08172",
+        "priceRange": 1,
+        "state": "Barcelona",
+        "translated": false,
+        "translationNumber": 3,
+        "updatedAt": "2015-03-09T23:34:03.823Z"
+    },
+	{
+        "address": "Rosselló 148",
+        "city": "Barcelona",
+        "createdAt": "2015-03-03T11:44:19.848Z",
+        "description": "Cuina de mercat. Ada Parellada",
+        "generalCategories": [
+            {
+                "__type": "Pointer",
+                "className": "Category",
+                "objectId": "gTArvyZ3tl"
+            }
+        ],
+        "initialLanguage": "ca",
+        "languages": [
+            "ca",
+            "es",
+            "en",
+            "fr"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.39103257906431,
+            "longitude": 2.154446840286255
+        },
+        "logoFile": {
+            "__type": "File",
+            "name": "tfss-abb6e368-fd60-4ffa-a57b-90ff1a95f049-semproniana.jpg",
+            "url": "http://files.parsetfss.com/3f9dd027-9996-46f0-a01e-f38db350a98e/tfss-abb6e368-fd60-4ffa-a57b-90ff1a95f049-semproniana.jpg"
+        },
+        "name": "Semproniana",
+        "normalizedName": "semproniana",
+        "objectId": "qMmqLrIlBF",
+        "postalCode": "08036",
+        "priceRange": 1,
+        "state": "Barcelona",
+        "translated": true,
+        "translationNumber": 4,
+        "updatedAt": "2015-03-04T00:31:03.158Z"
+    },
+	{
+        "address": "Muntaner 153",
+        "city": "Barcelona",
+        "createdAt": "2015-03-04T00:15:45.971Z",
+        "description": "Restaurant Japonés",
+        "initialLanguage": "es",
+        "languages": [
+            "es"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.39107886038992,
+            "longitude": 2.153412848711014
+        },
+        "logoFile": {
+            "__type": "File",
+            "name": "tfss-d800e582-a27c-4787-8703-2ee6637e6a1d-TEMPURA YA.jpg",
+            "url": "http://files.parsetfss.com/3f9dd027-9996-46f0-a01e-f38db350a98e/tfss-d800e582-a27c-4787-8703-2ee6637e6a1d-TEMPURA%20YA.jpg"
+        },
+        "name": "Tempura Ya",
+        "normalizedName": "tempura ya",
+        "objectId": "qm3qO5ghSO",
+        "postalCode": "08036",
+        "priceRange": 1,
+        "state": "Barcelona",
+        "translated": true,
+        "translationNumber": 1,
+        "updatedAt": "2015-03-04T00:15:46.612Z"
+    },
+	{
+        "address": "sdadas",
+        "city": "asdas",
+        "createdAt": "2015-03-17T22:10:56.907Z",
+        "description": "sdsafds",
+        "generalCategories": [
+            {
+                "__type": "Pointer",
+                "className": "Category",
+                "objectId": "VxFYFczRnk"
+            }
+        ],
+        "initialLanguage": "es",
+        "languages": [
+            "es"
+        ],
+        "location": {
+            "__type": "GeoPoint",
+            "latitude": 41.38234720451019,
+            "longitude": 2.1357250213623047
+        },
+        "name": "Test32",
+        "normalizedName": "test32",
+        "objectId": "yruQFyL1m5",
+        "postalCode": "asdas",
+        "priceRange": 2,
+        "state": "asdas",
+        "translated": true,
+        "translationNumber": 1,
+        "updatedAt": "2015-03-17T22:10:57.356Z"
+    }
+] }

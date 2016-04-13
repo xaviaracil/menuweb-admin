@@ -1,0 +1,434 @@
+{ "results": [
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "LUVEtUTFWj"
+        },
+        "createdAt": "2015-03-17T22:22:52.798Z",
+        "name": "Categoria 351",
+        "objectId": "029vX0WNke",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "CiDlxN7ABG"
+        },
+        "updatedAt": "2015-03-17T22:22:52.798Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "EQJJYmOxu2"
+        },
+        "createdAt": "2015-03-25T16:31:43.412Z",
+        "name": "Helados",
+        "objectId": "0St8mnO2WE",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "tuJ0CGFNFv"
+        },
+        "updatedAt": "2015-03-25T16:31:43.412Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "CImUAu8ezk"
+        },
+        "createdAt": "2015-03-25T16:31:43.294Z",
+        "name": "Pizzas",
+        "objectId": "0hE53tiMqh",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "tuJ0CGFNFv"
+        },
+        "updatedAt": "2015-03-25T16:31:43.294Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "qXtCxT7IUT"
+        },
+        "createdAt": "2015-03-17T22:06:37.801Z",
+        "name": "Categoria 301",
+        "objectId": "0kJ4DKs98s",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "LRxR0vrqAQ"
+        },
+        "updatedAt": "2015-03-17T22:06:37.801Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "ykQIXTUg59"
+        },
+        "createdAt": "2015-03-25T16:31:43.280Z",
+        "name": "Menu",
+        "objectId": "3PxPaajYHY",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "tuJ0CGFNFv"
+        },
+        "updatedAt": "2015-03-25T16:31:43.280Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "XkRIQFoDQ1"
+        },
+        "createdAt": "2015-03-17T22:10:57.705Z",
+        "name": "Categoria 32",
+        "objectId": "6ed7g1TVmJ",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "Osg8oCngoC"
+        },
+        "updatedAt": "2015-03-17T22:10:57.705Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "LR0sIMxOET"
+        },
+        "createdAt": "2015-03-25T16:31:43.247Z",
+        "name": "Postres",
+        "objectId": "BbU7y7WLdr",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "tuJ0CGFNFv"
+        },
+        "updatedAt": "2015-03-25T16:31:43.247Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "D0zoA1yfoe"
+        },
+        "createdAt": "2015-03-10T16:50:05.635Z",
+        "name": "Menú tradicional 65€",
+        "objectId": "BvWpnL0MPx",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "55c0v4aFSw"
+        },
+        "updatedAt": "2015-03-10T16:50:05.635Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "JNcyX39mL9"
+        },
+        "createdAt": "2015-03-25T16:31:43.288Z",
+        "name": "OFERTAS",
+        "objectId": "EuQiUB6Vm1",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "tuJ0CGFNFv"
+        },
+        "updatedAt": "2015-03-25T16:31:43.288Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "C4IvOPNSk0"
+        },
+        "createdAt": "2014-05-27T13:17:17.937Z",
+        "language": "ca",
+        "name": "Sushi",
+        "objectId": "F6MqQr04KJ",
+        "updatedAt": "2014-05-27T13:17:17.937Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "CTxEReIXNQ"
+        },
+        "createdAt": "2015-03-25T16:31:43.273Z",
+        "name": "Complementos",
+        "objectId": "KwH8x00rAj",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "tuJ0CGFNFv"
+        },
+        "updatedAt": "2015-03-25T16:31:43.273Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "81Y8Cn2jfG"
+        },
+        "createdAt": "2015-03-13T17:03:04.735Z",
+        "name": "ENTRANTES",
+        "objectId": "NayMqbto5u",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "EDg0HOBeBF"
+        },
+        "updatedAt": "2015-03-13T17:03:04.735Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "7j3i4saeHI"
+        },
+        "createdAt": "2014-05-27T13:17:26.651Z",
+        "language": "ca",
+        "name": "Pizzeria",
+        "objectId": "NpTN09r8zi",
+        "updatedAt": "2014-05-27T13:17:26.651Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "VsJnyD0ZoL"
+        },
+        "createdAt": "2015-03-10T17:01:39.621Z",
+        "name": "Menú tradicional 65€",
+        "objectId": "NtsBhO9ojz",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "55c0v4aFSw"
+        },
+        "updatedAt": "2015-03-10T17:01:39.621Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "GPYOrPnSPK"
+        },
+        "createdAt": "2014-09-25T20:05:28.704Z",
+        "language": "ca",
+        "name": "Libanés",
+        "objectId": "Og5HNcpQQJ",
+        "updatedAt": "2014-09-25T20:05:28.704Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "CZn3YCR4No"
+        },
+        "createdAt": "2015-03-17T22:24:37.379Z",
+        "name": "Categoria 361",
+        "objectId": "QybS7doFXl",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "wnxdLXchOm"
+        },
+        "updatedAt": "2015-03-17T22:24:37.379Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "FVilVUk1rV"
+        },
+        "createdAt": "2015-03-03T11:44:53.278Z",
+        "name": "La carta feta a mida",
+        "objectId": "SAJrWk6Qro",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "OBJjR1sEGI"
+        },
+        "updatedAt": "2015-03-03T11:44:53.278Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "JMRGJbK8vX"
+        },
+        "createdAt": "2015-03-13T17:02:43.572Z",
+        "name": "POSTRES",
+        "objectId": "UKLZ40IT1X",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "EDg0HOBeBF"
+        },
+        "updatedAt": "2015-03-13T17:02:43.572Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "ZoT1GTp4Us"
+        },
+        "createdAt": "2014-05-27T13:17:02.497Z",
+        "language": "ca",
+        "name": "Mediterrani",
+        "objectId": "YOnQ6dmr3g",
+        "updatedAt": "2014-05-27T13:17:02.497Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "e3iJeGsoAK"
+        },
+        "createdAt": "2014-05-27T14:14:02.731Z",
+        "language": "ca",
+        "name": "Postres",
+        "objectId": "aKpZdgxj7t",
+        "updatedAt": "2014-05-27T14:14:02.731Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "aKWDznuhD9"
+        },
+        "createdAt": "2015-03-13T17:02:52.342Z",
+        "name": "PESCADOS",
+        "objectId": "bGKmaddPrd",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "EDg0HOBeBF"
+        },
+        "updatedAt": "2015-03-13T17:02:52.342Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "JQsxZWPDCp"
+        },
+        "createdAt": "2015-03-17T22:16:20.548Z",
+        "name": "Categoria 341",
+        "objectId": "dnqVcEtLi5",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "WPMvAZhMyT"
+        },
+        "updatedAt": "2015-03-17T22:16:20.548Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "f6660xYjtu"
+        },
+        "createdAt": "2015-03-25T16:31:43.339Z",
+        "name": "Bebidas",
+        "objectId": "e1IkFtHjg1",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "tuJ0CGFNFv"
+        },
+        "updatedAt": "2015-03-25T16:31:43.339Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "MyHbQ20Hl6"
+        },
+        "createdAt": "2014-05-27T13:17:36.101Z",
+        "language": "ca",
+        "name": "Vegetarià",
+        "objectId": "eyoyXa9rQY",
+        "updatedAt": "2014-05-27T13:17:36.101Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "ZoT1GTp4Us"
+        },
+        "createdAt": "2014-05-16T14:19:48.365Z",
+        "language": "en",
+        "name": "Mediterranean",
+        "objectId": "ja7bsp02l9",
+        "updatedAt": "2014-05-16T14:19:48.365Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "mR4x6IVV6h"
+        },
+        "createdAt": "2015-03-17T22:14:16.032Z",
+        "name": "Categoria 331",
+        "objectId": "pW5JKtpOqh",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "sAFtlp33tU"
+        },
+        "updatedAt": "2015-03-17T22:14:16.032Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "4hwHt60prb"
+        },
+        "createdAt": "2015-03-13T17:02:58.337Z",
+        "name": "CARNES",
+        "objectId": "rNccOY0Z5o",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "EDg0HOBeBF"
+        },
+        "updatedAt": "2015-03-13T17:02:58.337Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "25octGXmwX"
+        },
+        "createdAt": "2015-03-17T22:09:28.177Z",
+        "name": "Categoria 331",
+        "objectId": "vWKR3UfAwp",
+        "translation": {
+            "__type": "Pointer",
+            "className": "Translation",
+            "objectId": "UaQk6UkmSx"
+        },
+        "updatedAt": "2015-03-17T22:09:28.177Z"
+    },
+	{
+        "category": {
+            "__type": "Pointer",
+            "className": "Category",
+            "objectId": "ZoT1GTp4Us"
+        },
+        "createdAt": "2014-05-16T14:13:26.790Z",
+        "language": "es",
+        "name": "Mediterráneo",
+        "objectId": "wCSBvmWgsG",
+        "updatedAt": "2014-05-16T14:17:31.300Z"
+    }
+] }

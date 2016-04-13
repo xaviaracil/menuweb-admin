@@ -1,0 +1,18 @@
+{ "results": [
+	{
+        "bcryptPassword": "$2a$10$1kfIlZ0YLcTXPmTdE.EMleJL9LkcSK9MfBbEzY2YAB759KpIMEili",
+        "createdAt": "2014-02-27T18:15:22.793Z",
+        "objectId": "j6W2im92jY",
+        "sessionToken": "ofejyrsygatcgybbfdb8ihi7n",
+        "updatedAt": "2014-02-27T18:15:22.793Z",
+        "username": "admin"
+    },
+	{
+        "bcryptPassword": "$2a$10$UM1FjMQzej7luFhFiiVld.YKURGRLc1mw2vsohFYAtQMhYrVILr8y",
+        "createdAt": "2014-02-21T21:08:24.992Z",
+        "objectId": "lW166ILgfy",
+        "sessionToken": "z5pw29qe2loy1csv2z2asa66w",
+        "updatedAt": "2014-02-21T21:08:24.992Z",
+        "username": "traduccions"
+    }
+] }
